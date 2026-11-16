@@ -36,6 +36,11 @@ jobs:
         run: scripts/fetch-sources.sh .sources
       - name: Generate data
         run: julia --project=sitegen scripts/sitegen.jl .sources data/generated
+      - name: Brand assets from OpenSymbolicRules/.github
+        run: |
+          python3 -m pip install --quiet "pillow==12.1.1"
+          python3 -I scripts/test_brand_assets.py
+          python3 -I scripts/brand-assets.py .sources/.github/profile/assets/banner.png static/generated/brand
       - name: Configure Pages
         id: pages
         if: github.event_name != 'pull_request'

@@ -37,6 +37,10 @@
 - **Independence.** Keep the disclaimer: the project is not affiliated with
   Wolfram Research, the RUBI authors, the Lean FRO, Mathlib or the OpenMath
   Society. Imitate the patterns of other sites, never their content.
+- **Visual identity.** It is defined by the banner of
+  `OpenSymbolicRules/.github`; derive assets with `scripts/brand-assets.py`
+  (tested by `scripts/test_brand_assets.py`) and keep the `theme-osr`
+  palette, never a hand-copied image.
 - Content is in English.
 - `llms.txt` and `llms-full.txt` are output formats of the home page
   (`layouts/home.llms.txt`, `layouts/home.llmsfull.txt`); a new page appears

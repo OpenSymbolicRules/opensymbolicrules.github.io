@@ -6,7 +6,11 @@ cascade:
 bookToC: false
 ---
 
+<div class="osr-hero"><img src="/generated/brand/banner.png" width="2170" height="725" alt="OpenSymbolicRules: an expression tree a × b + 0 rewritten to a × b. Open, interoperable rules for symbolic mathematics."></div>
+
 # OpenSymbolicRules
+
+<p class="osr-tagline">Open, interoperable rules for symbolic mathematics.</p>
 
 OpenSymbolicRules publishes rewrite rules for computer algebra as plain JSON
 data, validated by JSON Schema and written with OpenMath symbols, so that any

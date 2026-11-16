@@ -274,6 +274,9 @@ function build(sources, out; sets = DEFAULT_SETS,
     repos = Dict{String,Any}()
     for name in sort(readdir(sources))
         dir = joinpath(sources, name)
+        # `.github` holds the organization profile and its visual identity,
+        # not a project repository.
+        startswith(name, ".") && continue
         isdir(joinpath(dir, ".git")) || continue
         repos[name] = repo_info(dir)
         repos[name]["url"] = "$ORG_URL/$name"
@@ -411,6 +414,11 @@ end
 
 "Counts read from the Specification, Lean, Conformance and Verification checkouts."
 function extra_stats!(stats, sources, repos)
+    banner = joinpath(sources, ".github", "profile", "assets", "banner.png")
+    if isfile(banner)
+        info = repo_info(joinpath(sources, ".github"))
+        stats["brand"] = provenance(".github", info, "profile/assets/banner.png", "")
+    end
     spec = joinpath(sources, "Specification", "docs", "osr-v1.md")
     if isfile(spec)
         ids = Set(m.match for m in eachmatch(r"V1-[A-Z]+-\d+[a-z]?(?=\.\*\*)", read(spec, String)))

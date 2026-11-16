@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Visual identity of the organization (OpenSymbolicRules/.github banner):
+  banner on the home page, logo, favicon and social preview derived at build
+  time by `scripts/brand-assets.py`, and an `osr` light/dark color theme
+  (navy, teal, amber, cream) with accessible link contrast.
 - Work-in-progress notice on every page and a "Work in progress" section in
   the disclaimer (coverage, pre-release format, provisional statuses, scope of
   the verified statements, tooling); the size of the v0.1 source corpus is

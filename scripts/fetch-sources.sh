@@ -4,7 +4,7 @@
 # checkouts only, so every number it shows is tied to a commit.
 set -euo pipefail
 dir=${1:-.sources}
-repos=(Specification Integration Lean Verification Conformance Calculus Algebra Trigonometry Logic OpenSymbolicRules.jl)
+repos=(.github Specification Integration Lean Verification Conformance Calculus Algebra Trigonometry Logic OpenSymbolicRules.jl)
 mkdir -p "$dir"
 for r in "${repos[@]}"; do
   if [ -d "$dir/$r/.git" ]; then

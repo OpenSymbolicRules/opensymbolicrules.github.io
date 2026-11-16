@@ -13,13 +13,15 @@ setup:
 sources:
 	scripts/fetch-sources.sh {{sources}}
 
-# Generate data/generated/ from the checkouts.
+# Generate data/generated/ and the brand assets from the checkouts.
 sitegen:
 	julia --project=sitegen scripts/sitegen.jl {{sources}} data/generated
+	python3 -I scripts/brand-assets.py {{sources}}/.github/profile/assets/banner.png static/generated/brand
 
 # Run the generator tests.
 test:
 	julia --project=sitegen -e 'using Pkg; Pkg.test()'
+	python3 -I scripts/test_brand_assets.py
 
 # Build the site into public/ (no warning allowed), then check its internal links.
 build: sitegen

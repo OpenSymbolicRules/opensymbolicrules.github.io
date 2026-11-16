@@ -88,3 +88,28 @@ end
         @test stats["sets"]["integration"]["corpus_path"] == "rules"
     end
 end
+
+@testitem "brand identity from the organization profile repository" begin
+    include("fixtures.jl")
+    using SiteGen, JSON
+    mktempdir() do root
+        src = joinpath(root, "sources")
+        mkpath(src)
+        fixture_repo(src, "Algebra", "algebra", [fixture_rule("algebra.a")])
+        brand = joinpath(src, ".github")
+        mkpath(joinpath(brand, "profile", "assets"))
+        write(joinpath(brand, "profile", "assets", "banner.png"), "png")
+        git!(brand, "init", "-q", "-b", "main")
+        git!(brand, "add", ".")
+        git!(brand, "commit", "-q", "-m", "brand")
+        out = joinpath(root, "data")
+        SiteGen.build(src, out; sets = ["algebra" => "Algebra"])
+        repos = JSON.parsefile(joinpath(out, "repos.json"))
+        @test !haskey(repos, ".github")
+        stats = JSON.parsefile(joinpath(out, "stats.json"))
+        @test stats["brand"]["path"] == "profile/assets/banner.png"
+        @test stats["brand"]["repo"] == ".github"
+        @test length(stats["brand"]["commit"]) == 40
+        @test stats["repositories"] == 1
+    end
+end

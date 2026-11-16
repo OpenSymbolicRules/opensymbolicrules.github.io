@@ -42,6 +42,13 @@ any broken internal link (pages, anchors, and the links of `llms.txt` and
    from the same pages and data.
 4. `scripts/check-links.jl` checks the internal links of the output.
 
+The visual identity comes from the organization profile repository
+(`OpenSymbolicRules/.github`, `profile/assets/banner.png`):
+`scripts/brand-assets.py` (Python, Pillow) copies the banner and derives the
+logo, favicon and social preview image into `static/generated/brand/` (not
+committed). The palette of `assets/_custom.scss` (`theme-osr`) is sampled
+from the same banner.
+
 `data/generated/` is not committed and must not be edited: fix the generator
 or the source repository.
 

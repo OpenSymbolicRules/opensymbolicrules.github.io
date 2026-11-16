@@ -33,6 +33,7 @@
 !scripts/*.sh
 !scripts/*.jl
 !scripts/*.sha256
+!scripts/*.py
 
 !sitegen/
 !sitegen/Project.toml
@@ -41,3 +42,6 @@
 !sitegen/src/*.jl
 !sitegen/test/
 !sitegen/test/*.jl
+
+# Brand assets derived at build time from OpenSymbolicRules/.github.
+static/generated/

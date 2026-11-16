@@ -1,0 +1,10 @@
+{{- /* Social preview derived from the organization banner (scripts/brand-assets.py). */ -}}
+<meta property="og:title" content="{{ partial "docs/html-head-title" . }}">
+<meta property="og:description" content="{{ default .Site.Params.description .Description }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="website">
+<meta property="og:image" content="{{ "generated/brand/og.png" | absURL }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#06212f">

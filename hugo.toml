@@ -35,7 +35,9 @@ enableGitInfo = false
 
 [params]
   description = "Open, language-neutral rewrite rules for computer algebra, with explicit validity conditions and Lean proofs or counterexamples."
-  BookTheme = "auto"
+  BookTheme = "osr"
+  BookLogo = "generated/brand/logo.png"
+  BookFavicon = "generated/brand/favicon.png"
   BookToC = true
   BookSection = "*"
   BookSearch = true

@@ -22,6 +22,7 @@ No figure on this site is typed by hand. At build time,
 | Conformance cases | `Conformance/suites/<set>/<set>.cases.json` |
 | Verification reports | the directories of `Verification/reports/` |
 | Commits | `git rev-parse`, `git log` and `git rev-list --count` of each checkout |
+| Visual identity (banner, logo, favicon, preview image) | `profile/assets/banner.png` of the organization repository `OpenSymbolicRules/.github`, derived by `scripts/brand-assets.py` |
 
 Every registry row and every figure links to `repository@commit` and the file
 it was read from, and the date of that commit. A rule's verification record
