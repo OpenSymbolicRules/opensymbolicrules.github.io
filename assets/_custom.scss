@@ -102,7 +102,7 @@ $osr-cream: #f5eee5;
 }
 .osr-proved, .osr-strengthened { color: var(--osr-proved); }
 .osr-refuted { color: var(--osr-refuted); }
-.osr-refuted-corrected { color: var(--osr-corrected); }
+.osr-refuted-corrected, .osr-strengthened-unproved { color: var(--osr-corrected); }
 .osr-unproved, .osr-unsupported, .osr-not-migrated { color: var(--osr-neutral); }
 
 .osr-rule {

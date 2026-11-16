@@ -171,12 +171,16 @@ finding(rule, prefix) = (i = findfirst(f -> startswith(f, prefix), get(rule, "fi
     classify(rule, corrected) -> String
 
 `"strengthened"` for a corrected variant (a `strengthened:` finding and a
-proof), `"refuted, corrected"` for a refuted rule whose id is in `corrected`,
+proof), `"strengthened, unproved"` for one distributed with numerical
+evidence only, `"refuted, corrected"` for a refuted rule whose id is in `corrected`,
 then `"refuted"`, `"proved"`, `"unsupported"` or `"unproved"`.
 """
 function classify(rule, corrected)
     st = statuses(rule)
-    has_finding(rule, "strengthened:") && "proved" in st && return "strengthened"
+    if has_finding(rule, "strengthened:")
+        "proved" in st && return "strengthened"
+        "counterexample" in st || return "strengthened, unproved"
+    end
     if "counterexample" in st
         return rule["id"] in corrected ? "refuted, corrected" : "refuted"
     end

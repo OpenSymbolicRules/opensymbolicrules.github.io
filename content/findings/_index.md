@@ -21,6 +21,8 @@ Statuses:
 - **refuted, corrected**: refuted, and a strengthened variant is proved;
 - **strengthened**: a corrected variant: the converted conditions plus a
   non-degeneracy condition, proved (Specification V1-R-005e);
+- **strengthened, unproved**: a corrected variant distributed before its
+  proof, with the numerical evidence given in a `numerical:` finding;
 - **unproved**, **unsupported**: no proof or counterexample yet, or a
   condition with no meaning in the domain;
 - **not migrated**: considered, but not expressible in OSR v1 yet (the reason

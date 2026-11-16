@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Registry status "strengthened, unproved" for corrected variants distributed
+  with numerical evidence before their proof.
 - Visual identity of the organization (OpenSymbolicRules/.github banner):
   banner on the home page, logo, favicon and social preview derived at build
   time by `scripts/brand-assets.py`, and an `osr` light/dark color theme
