@@ -70,3 +70,13 @@
 .osr-registry th:nth-child(7), .osr-registry td:nth-child(7) { min-width: 12rem; }
 .osr-registry th:nth-child(8), .osr-registry td:nth-child(8) { min-width: 18rem; }
 .osr-registry th:nth-child(9), .osr-registry td:nth-child(9) { min-width: 12rem; }
+
+// Work-in-progress notice (text, not color, carries the meaning).
+.osr-wip {
+  margin: 0 0 1.5rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #b26b00;
+  border-left-width: 6px;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+}

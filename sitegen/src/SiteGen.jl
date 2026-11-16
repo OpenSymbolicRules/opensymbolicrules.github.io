@@ -141,6 +141,17 @@ function om_text(o)::String
     return string(name, "(", join(om_text.(args), ", "), ")")
 end
 
+"Number of v0.1 source rules in the `rules/` tree of a repository (`meta.json` excluded)."
+function corpus_rules(dir)
+    isdir(dir) || return 0
+    n = 0
+    for (root, _, files) in walkdir(dir), f in files
+        (endswith(f, ".json") && f != "meta.json") || continue
+        n += length(get(JSON.parsefile(joinpath(root, f)), "rules", []))
+    end
+    return n
+end
+
 "Number of residual integrals `int(λx. H)(x)` in an object."
 function residual_integrals(o)
     o isa AbstractDict || return o isa AbstractVector ? sum(residual_integrals, o; init = 0) : 0
@@ -346,6 +357,8 @@ function build(sources, out; sets = DEFAULT_SETS,
             "boolean" => count_by(migrated, "boolean"),
             "metrics" => get(report, "metrics", Dict()),
             "osr_format" => get(doc, "osr_format", ""),
+            "corpus_rules" => corpus_rules(joinpath(sources, repo, "rules")),
+            "corpus_path" => "rules",
             "profiles" => Dict(string(k) => length(get(v, "rules", [])) for (k, v) in get(doc, "profiles", Dict())),
             "build" => get(doc, "build", Dict()), "provenance" => prov)
         append!(rows, setrows)

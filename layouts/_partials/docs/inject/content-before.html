@@ -1,0 +1,11 @@
+{{- /* Work-in-progress notice on every page; figures from data/generated. */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $int := index $d.stats.sets "integration" -}}
+<aside class="osr-wip" role="note" aria-label="Work in progress">
+  <strong>Work in progress.</strong>
+  OpenSymbolicRules is a long-term research project, far from complete: the
+  interchange format is a pre-release (<code>{{ $int.osr_format }}</code>) and may change,
+  rule statuses change as proofs, counterexamples and corrected variants are
+  added, and only {{ $int.legacy_rules }} of the {{ $int.corpus_rules }} RUBI rules have been
+  audited so far. <a href="/disclaimer/#work-in-progress">What this means</a>.
+</aside>

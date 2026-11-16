@@ -68,3 +68,23 @@ end
         @test row["status"] == "proved"
     end
 end
+
+@testitem "size of the v0.1 source corpus" begin
+    include("fixtures.jl")
+    using SiteGen, JSON
+    mktempdir() do root
+        src = joinpath(root, "sources")
+        mkpath(src)
+        dir = fixture_repo(src, "Integration", "integration", [fixture_rule("integration.a")])
+        mkpath(joinpath(dir, "rules", "1-algebraic"))
+        write(joinpath(dir, "rules", "1-algebraic", "a.json"),
+            JSON.json(Dict("identity" => "rubi:1", "rules" => [Dict("id" => 1), Dict("id" => 2)])))
+        write(joinpath(dir, "rules", "b.json"), JSON.json(Dict("rules" => [Dict("id" => 1)])))
+        write(joinpath(dir, "rules", "meta.json"), JSON.json(Dict("rules" => [Dict("id" => 9)])))
+        out = joinpath(root, "data")
+        SiteGen.build(src, out; sets = ["integration" => "Integration"])
+        stats = JSON.parsefile(joinpath(out, "stats.json"))
+        @test stats["sets"]["integration"]["corpus_rules"] == 3
+        @test stats["sets"]["integration"]["corpus_path"] == "rules"
+    end
+end

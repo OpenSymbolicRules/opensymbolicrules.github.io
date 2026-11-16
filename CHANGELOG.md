@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Work-in-progress notice on every page and a "Work in progress" section in
+  the disclaimer (coverage, pre-release format, provisional statuses, scope of
+  the verified statements, tooling); the size of the v0.1 source corpus is
+  generated from each repository's `rules/` tree.
 - Hugo site with the vendored Hugo Book theme (v13): home page with key
   figures and the repository table, findings registry, pages on the refuted
   power rules, strengthened variants and residual integrals, the OSR v1

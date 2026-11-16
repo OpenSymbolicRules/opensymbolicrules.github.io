@@ -13,6 +13,11 @@ validity and carries, per domain, a Lean 4 proof or counterexample. Generated
 ({{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts "; " }}), {{ $int.legacy_rules }} RUBI 4.16.1 rules audited
 ({{ $int.not_migrated }} not migrated), {{ $int.strengthened }} strengthened variants, {{ $s.theorems }} Lean theorems.
 
+Work in progress: a long-term research project, far from complete. The format is a
+pre-release ({{ $int.osr_format }}), statuses change as proofs, counterexamples and corrected
+variants are added, and {{ $int.legacy_rules }} of the {{ $int.corpus_rules }} RUBI rules have been audited so far;
+see {{ "disclaimer/" | absURL }}.
+
 ## Pages
 {{ range site.Home.Pages.ByWeight }}
 - [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . }}{{ end }}

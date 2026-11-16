@@ -14,6 +14,7 @@ No figure on this site is typed by hand. At build time,
 |---|---|
 | Rules, conditions, findings, statuses | `v1/<set>.osr.json` of each domain repository |
 | Rules not migrated, metrics | `v1/<set>.report.json` |
+| Size of the source corpus (v0.1 rules) | the `rules/` tree of each domain repository |
 | Lean toolchain, Mathlib revision, source digest | the `build` record of each rule set |
 | Repository descriptions | `Specification/ecosystem.json`, then the site's `sitegen/repos.toml` for repositories it does not list |
 | Changelog entries | the first section of each `CHANGELOG.md` |
