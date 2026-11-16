@@ -1,0 +1,4 @@
+{{- /* The generated data, or a build error when `just sitegen` has not run. */ -}}
+{{- $d := hugo.Data.generated -}}
+{{- if not $d -}}{{- errorf "data/generated is missing: run `just sitegen` before `hugo`" -}}{{- end -}}
+{{- return $d -}}

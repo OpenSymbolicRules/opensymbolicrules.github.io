@@ -1,0 +1,33 @@
+{{- $d := hugo.Data.generated -}}
+{{- if not $d }}{{ errorf "data/generated is missing: run `just sitegen` before `hugo`" }}{{ end -}}
+{{- $s := $d.stats -}}
+{{- $int := index $s.sets "integration" -}}
+# {{ site.Title }}
+
+> {{ site.Params.description }}
+
+OpenSymbolicRules publishes rewrite rules for computer algebra as JSON data
+(OSR v1: JSON Schema, OpenMath symbols). Each rule states its conditions of
+validity and carries, per domain, a Lean 4 proof or counterexample. Generated
+{{ $s.generated }} from the public repositories: {{ $s.rules_distributed }} rules distributed
+({{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts "; " }}), {{ $int.legacy_rules }} RUBI 4.16.1 rules audited
+({{ $int.not_migrated }} not migrated), {{ $int.strengthened }} strengthened variants, {{ $s.theorems }} Lean theorems.
+
+## Pages
+{{ range site.Home.Pages.ByWeight }}
+- [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . }}{{ end }}
+{{- range .Pages.ByWeight }}
+  - [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . }}{{ end }}
+{{- end }}
+{{- end }}
+
+## Data
+
+{{ range $k, $v := $s.sets }}{{ with $v.provenance -}}
+- [{{ .repo }} v1/{{ $k }}.osr.json at {{ .short }}](https://raw.githubusercontent.com/OpenSymbolicRules/{{ .repo }}/{{ .commit }}/{{ .path }}): the {{ $k }} rule set ({{ $v.rules }} rules), JSON
+{{ end }}{{ end -}}
+- [Specification, OSR v1](https://github.com/OpenSymbolicRules/Specification/blob/main/docs/osr-v1.md): the interchange format and its requirements
+
+## Optional
+
+- [Full text]({{ "llms-full.txt" | absURL }}): every page as text, and every registry rule with its status, conditions, counterexample and provenance

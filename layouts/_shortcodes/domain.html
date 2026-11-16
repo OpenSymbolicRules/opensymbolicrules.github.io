@@ -1,0 +1,45 @@
+{{- /* Summary of one rule set: {{< domain set="calculus" >}} */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $set := .Get "set" -}}
+{{- $s := index $d.stats.sets $set -}}
+{{- if not $s }}{{ errorf "rule set %q is not in the generated data (%s)" $set .Position }}{{ end -}}
+{{- $repo := index $d.repos $s.repo -}}
+<div class="osr-stats">
+  <div class="osr-stat"><span class="osr-num">{{ $s.rules }}</span><span class="osr-label">rules in <code>v1/{{ $set }}.osr.json</code></span>
+    <span class="osr-src">{{ partial "osr/prov.html" $s.provenance }}</span></div>
+  {{- if $s.not_migrated }}
+  <div class="osr-stat"><span class="osr-num">{{ $s.not_migrated }}</span><span class="osr-label">considered, not migrated (reasons in the registry)</span></div>
+  {{- end }}
+  {{- if $s.strengthened }}
+  <div class="osr-stat"><span class="osr-num">{{ $s.strengthened }}</span><span class="osr-label">strengthened variants</span></div>
+  {{- end }}
+  <div class="osr-stat"><span class="osr-num">{{ $repo.commits }}</span><span class="osr-label">commits</span>
+    <span class="osr-src"><a href="{{ $repo.url }}">{{ $s.repo }}</a>, head <code>{{ $repo.short }}</code> {{ $repo.date }}</span></div>
+</div>
+
+<table class="osr-table">
+  <thead><tr><th scope="col">Status</th><th scope="col">Rules</th></tr></thead>
+  <tbody>{{ range $k, $v := $s.status }}<tr><td><a href="/findings/?c2={{ $s.repo }}&amp;c3={{ $k }}"><span class="osr-badge osr-{{ $k | anchorize }}">{{ $k }}</span></a></td><td>{{ $v }}</td></tr>{{ end }}</tbody>
+</table>
+
+{{- $domains := slice (dict "key" "real" "name" "ℝ") (dict "key" "complex" "name" "ℂ") (dict "key" "boolean" "name" "𝔹") }}
+<table class="osr-table">
+  <thead><tr><th scope="col">Domain</th>{{ range slice "certified" "proved" "refuted" "unproved" "unsupported" }}<th scope="col">{{ . }}</th>{{ end }}</tr></thead>
+  <tbody>
+  {{- range $domains }}{{ $c := index $s .key }}{{ if and $c (not (and (eq (len $c) 1) (index $c "—"))) }}
+    <tr><td>{{ .name }}</td>{{ range slice "certified" "proved" "refuted" "unproved" "unsupported" }}<td>{{ default 0 (index $c .) }}</td>{{ end }}</tr>
+  {{- end }}{{ end }}
+  </tbody>
+</table>
+
+<p>Format <code>{{ $s.osr_format }}</code>{{ with $s.build }}; verified with <code>{{ .lean_toolchain }}</code>, Mathlib <code>{{ substr .mathlib_revision 0 8 }}</code>, Lean source digest <code>{{ substr .source_digest 7 8 }}…</code>{{ end }}.
+<a href="/findings/?c2={{ $s.repo }}">All {{ $s.repo }} rules in the registry</a>.</p>
+
+{{- with $s.profiles }}
+<p>Profiles (named subsets of rules an engine applies together): {{ range $k, $v := . }}<code>{{ $k }}</code> ({{ $v }} rules) {{ end }}</p>
+{{- end }}
+
+{{- with $repo.changelog }}
+<p>Latest changelog entries of <a href="{{ $repo.url }}/blob/{{ $repo.commit }}/CHANGELOG.md">{{ $s.repo }}</a> (at <code>{{ $repo.short }}</code>):</p>
+<ul>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ul>
+{{- end }}

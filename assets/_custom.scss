@@ -1,0 +1,72 @@
+// OpenSymbolicRules site styles (on top of the vendored Hugo Book theme).
+
+.osr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.osr-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-200);
+  border-radius: 0.5rem;
+}
+.osr-num { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+.osr-label { font-weight: 600; }
+.osr-src, .osr-date { font-size: 0.8rem; color: var(--gray-500); }
+
+.osr-table-wrap { overflow-x: auto; }
+.markdown table.osr-table { display: table; width: 100%; font-size: 0.85rem; }
+.osr-table td, .osr-table th { vertical-align: top; }
+.osr-registry thead th { cursor: pointer; white-space: nowrap; user-select: none; }
+.osr-registry thead th[aria-sort="ascending"]::after { content: " ▲"; }
+.osr-registry thead th[aria-sort="descending"]::after { content: " ▼"; }
+.osr-registry thead th[data-rank]:not([data-rank=""])::after { content: " " attr(data-rank); }
+.osr-registry thead th[aria-sort="ascending"][data-rank]:not([data-rank=""])::after { content: " ▲" attr(data-rank); }
+.osr-registry thead th[aria-sort="descending"][data-rank]:not([data-rank=""])::after { content: " ▼" attr(data-rank); }
+.osr-registry thead input, .osr-registry thead select { width: 100%; min-width: 5rem; font-size: 0.8rem; }
+.osr-registry code { white-space: normal; word-break: break-word; }
+.osr-count { font-size: 0.9rem; }
+.osr-reset { margin-left: 1rem; font-size: 0.8rem; }
+
+// Status badges: text plus color, so the meaning never depends on color alone.
+.osr-badge {
+  display: inline-block;
+  padding: 0 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid currentColor;
+}
+.osr-proved, .osr-strengthened { color: #0b6b2f; }
+.osr-refuted { color: #a4161a; }
+.osr-refuted-corrected { color: #8a4b00; }
+.osr-unproved, .osr-unsupported, .osr-not-migrated { color: #4a4a4a; }
+@media (prefers-color-scheme: dark) {
+  .book-theme-auto .osr-proved, .book-theme-auto .osr-strengthened { color: #7ee2a0; }
+  .book-theme-auto .osr-refuted { color: #ff9b9b; }
+  .book-theme-auto .osr-refuted-corrected { color: #ffc46b; }
+  .book-theme-auto .osr-unproved, .book-theme-auto .osr-unsupported, .book-theme-auto .osr-not-migrated { color: #c8c8c8; }
+}
+
+.osr-rule {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--gray-200);
+  background: var(--gray-100);
+  border-radius: 0.25rem;
+}
+.osr-rule dt { font-weight: 600; margin-top: 0.4rem; }
+.osr-rule dd { margin-left: 1rem; }
+
+// The registry page uses the full width of the window.
+.book-layout-wide { min-width: 0; }
+.book-layout-wide .container { max-width: none; }
+.osr-registry th:nth-child(1), .osr-registry td:nth-child(1) { min-width: 14rem; }
+.osr-registry th:nth-child(2), .osr-registry td:nth-child(2) { min-width: 20rem; }
+.osr-registry th:nth-child(7), .osr-registry td:nth-child(7) { min-width: 12rem; }
+.osr-registry th:nth-child(8), .osr-registry td:nth-child(8) { min-width: 18rem; }
+.osr-registry th:nth-child(9), .osr-registry td:nth-child(9) { min-width: 12rem; }

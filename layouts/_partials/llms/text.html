@@ -1,0 +1,22 @@
+{{- /* Rendered page content as Markdown-like plain text, for llms-full.txt. */ -}}
+{{- $h := .Content -}}
+{{- $h = replaceRE `<a class="?anchor"?[^>]*>#</a>` "" $h -}}
+{{- $h = replaceRE `<script[\s\S]*?</script>` "" $h -}}
+{{- $h = replaceRE `<h1[^>]*>` "⟪NL⟫# " $h -}}
+{{- $h = replaceRE `<h2[^>]*>` "⟪NL⟫## " $h -}}
+{{- $h = replaceRE `<h3[^>]*>` "⟪NL⟫### " $h -}}
+{{- $h = replaceRE `<li[^>]*>` "⟪NL⟫- " $h -}}
+{{- $h = replaceRE `<dt[^>]*>` "⟪NL⟫" $h -}}
+{{- $h = replaceRE `</dt>` ": " $h -}}
+{{- $h = replaceRE `<tr[^>]*>` "⟪NL⟫| " $h -}}
+{{- $h = replaceRE `</t[dh]>` " | " $h -}}
+{{- $h = replaceRE `</(p|h[1-6]|ul|ol|dl|table|pre|div)>|<br\s*/?>` "⟪NL⟫" $h -}}
+{{- /* plainify normalises whitespace: keep the structural breaks above and
+       the lines of highlighted code as a ⟪NL⟫ marker until it has run. */ -}}
+{{- $h = replaceRE `<span class="line">` "⟪NL⟫" $h -}}
+{{- $h = $h | plainify | htmlUnescape -}}
+{{- $h = replaceRE `⟪NL⟫` "\n" $h -}}
+{{- $h = replaceRE `[ \t]+\n` "\n" $h -}}
+{{- $h = replaceRE `\n[ \t]+` "\n" $h -}}
+{{- $h = replaceRE `\n{3,}` "\n\n" $h -}}
+{{- return (strings.TrimSpace $h) -}}

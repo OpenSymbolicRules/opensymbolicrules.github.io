@@ -1,0 +1,19 @@
+{{- /* Every strengthened variant with the rule it corrects. */ -}}
+{{- $d := partial "osr/data.html" . -}}
+<div class="osr-table-wrap">
+<table class="osr-table">
+  <thead><tr><th scope="col">Rule as stated (refuted)</th><th scope="col">Counterexample</th><th scope="col">Added condition</th><th scope="col">Variant</th><th scope="col">ℝ</th><th scope="col">ℂ</th></tr></thead>
+  <tbody>
+  {{- range where $d.registry "status" "strengthened" }}
+    {{- $o := index (where $d.registry "id" .variant_of) 0 }}
+    <tr>
+      <td><a href="/findings/?c0={{ .variant_of }}"><code>{{ .variant_of }}</code></a><br><small>{{ .rubi }}</small></td>
+      <td>{{ with $o }}{{ .counterexample }}{{ end }}</td>
+      <td>{{ range $i, $c := .added_conditions }}{{ if $i }}, {{ end }}<code>{{ $c }}</code>{{ end }}</td>
+      <td><a href="/findings/?c0={{ .id }}"><code>{{ .id }}</code></a></td>
+      <td>{{ .real }}</td><td>{{ .complex }}</td>
+    </tr>
+  {{- end }}
+  </tbody>
+</table>
+</div>

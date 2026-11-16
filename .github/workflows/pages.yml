@@ -1,0 +1,68 @@
+name: Pages
+
+# Generate the site data from the public OpenSymbolicRules repositories,
+# build the Hugo site (no warning allowed), check its internal links and
+# deploy it to GitHub Pages on pushes to main.  A daily run picks up new
+# commits in the source repositories.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1"
+      - uses: julia-actions/cache@v2
+      - name: Install pinned Hugo Extended and Dart Sass
+        run: scripts/install-tools.sh .tools
+      - name: Generator tests
+        run: julia --project=sitegen -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - name: Clone the source repositories (read-only)
+        run: scripts/fetch-sources.sh .sources
+      - name: Generate data
+        run: julia --project=sitegen scripts/sitegen.jl .sources data/generated
+      - name: Configure Pages
+        id: pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+      - name: Build
+        env:
+          HUGO_ENVIRONMENT: production
+        run: |
+          PATH="$PWD/.tools/dart-sass:$PATH" .tools/hugo --minify --panicOnWarning -d public
+      - name: Check internal links
+        run: julia --project=sitegen scripts/check-links.jl public
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: public
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

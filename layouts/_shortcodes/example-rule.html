@@ -1,0 +1,6 @@
+{{- /* The complete JSON record of the example rule chosen by sitegen. */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $e := $d.example_rule -}}
+{{- if not $e.rule }}{{ errorf "data/generated/example_rule.json has no rule (%s)" .Position }}{{ end -}}
+<p>Rule <code>{{ $e.rule.id }}</code> as distributed in {{ partial "osr/prov.html" $e.provenance }} <code>{{ $e.provenance.path }}</code>:</p>
+{{ transform.Highlight (jsonify (dict "indent" "  ") $e.rule) "json" }}

@@ -1,0 +1,5 @@
+{{- /* Provenance link: repository@commit, path and date. */ -}}
+{{- with . -}}
+<a class="osr-prov" href="{{ .url }}" title="{{ .repo }} {{ .commit }} {{ .path }}">{{ .repo }}@{{ .short }}</a>
+{{- with .date }} <span class="osr-date">({{ . }})</span>{{ end -}}
+{{- end -}}

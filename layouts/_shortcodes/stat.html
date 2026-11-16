@@ -1,0 +1,6 @@
+{{- /* One generated number by path: {{< stat "sets.integration.rules" >}} */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $v := $d.stats -}}
+{{- range split (.Get 0) "." }}{{ $v = index $v . }}{{ end -}}
+{{- if eq $v nil }}{{ errorf "stat %q is missing (%s)" (.Get 0) .Position }}{{ end -}}
+{{- $v -}}

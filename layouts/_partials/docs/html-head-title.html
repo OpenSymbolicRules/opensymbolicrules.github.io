@@ -1,0 +1,2 @@
+{{- /* The home page is titled by its tagline instead of repeating the site title. */ -}}
+{{ if .IsHome }}{{ .Site.Title }}: open, verified rewrite rules for computer algebra{{ else }}{{ with partial "docs/title" . }}{{ . }} | {{ end }}{{ .Site.Title }}{{ end -}}

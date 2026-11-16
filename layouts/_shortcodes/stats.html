@@ -1,0 +1,25 @@
+{{- $d := partial "osr/data.html" . -}}
+{{- $s := $d.stats -}}
+{{- $int := index $s.sets "integration" -}}
+<div class="osr-stats">
+  <div class="osr-stat"><span class="osr-num">{{ $s.rules_distributed }}</span>
+    <span class="osr-label">rules distributed in <code>v1/</code> rule sets</span>
+    <span class="osr-src">{{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts " · " }}</span></div>
+  <div class="osr-stat"><span class="osr-num">{{ $int.legacy_rules }}</span>
+    <span class="osr-label">RUBI 4.16.1 rules audited</span>
+    <span class="osr-src">{{ sub $int.legacy_rules $int.not_migrated }} migrated, {{ $int.not_migrated }} reported as not migrated · {{ partial "osr/prov.html" $int.provenance }}</span></div>
+  <div class="osr-stat"><span class="osr-num">{{ $s.theorems }}</span>
+    <span class="osr-label">Lean 4 / Mathlib proofs and counterexamples</span>
+    <span class="osr-src">{{ with $int.build }}{{ .lean_toolchain }}, Mathlib {{ substr .mathlib_revision 0 8 }}{{ end }}</span></div>
+  <div class="osr-stat"><span class="osr-num">{{ $int.strengthened }}</span>
+    <span class="osr-label">strengthened variants of refuted RUBI rules, proved</span>
+    <span class="osr-src">Specification V1-R-005e · {{ partial "osr/prov.html" $int.provenance }}</span></div>
+  {{- with $s.conformance }}
+  <div class="osr-stat"><span class="osr-num">{{ .total }}</span>
+    <span class="osr-label">conformance cases</span>
+    <span class="osr-src">{{ partial "osr/prov.html" .provenance }}</span></div>
+  {{- end }}
+  <div class="osr-stat"><span class="osr-num">{{ $s.repositories }}</span>
+    <span class="osr-label">public repositories</span>
+    <span class="osr-src">generated {{ $s.generated }}</span></div>
+</div>

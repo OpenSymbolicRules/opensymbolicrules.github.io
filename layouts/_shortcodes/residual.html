@@ -1,0 +1,8 @@
+{{- $d := partial "osr/data.html" . -}}
+{{- $s := index $d.stats.sets "integration" -}}
+<table class="osr-table">
+  <thead><tr><th scope="col">Status</th><th scope="col">Rules with residual integrals</th></tr></thead>
+  <tbody>{{ $t := 0 }}{{ range $k, $v := $s.residual }}{{ $t = add $t $v }}<tr><td><span class="osr-badge osr-{{ $k | anchorize }}">{{ $k }}</span></td><td>{{ $v }}</td></tr>{{ end }}
+  <tr><td><strong>total</strong></td><td><strong>{{ $t }}</strong></td></tr></tbody>
+</table>
+<p class="osr-src">Source: {{ partial "osr/prov.html" $s.provenance }}.</p>

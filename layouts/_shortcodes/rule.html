@@ -1,0 +1,24 @@
+{{- /* A card for one registry row: {{< rule id="integration.linear_power" >}} */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $id := .Get "id" -}}
+{{- $r := index (where $d.registry "id" $id) 0 -}}
+{{- if not $r }}{{ errorf "rule %q is not in the registry (%s)" $id .Position }}{{ end -}}
+<div class="osr-rule">
+  <p class="osr-rule-head"><a href="/findings/?c0={{ $r.id }}"><code>{{ $r.id }}</code></a>
+    <span class="osr-badge osr-{{ $r.status | anchorize }}">{{ $r.status }}</span>
+    {{ with $r.title }}— {{ . }}{{ end }}</p>
+  {{- with $r.pattern }}
+  <p><code>{{ . }}</code> → <code>{{ $r.replacement }}</code></p>
+  {{- end }}
+  <dl>
+    {{- with $r.conditions }}<dt>Conditions</dt><dd>{{ range $i, $c := . }}{{ if $i }}, {{ end }}<code>{{ $c }}</code>{{ end }}</dd>{{ end }}
+    {{- with $r.added_conditions }}<dt>Added condition</dt><dd>{{ range $i, $c := . }}{{ if $i }}, {{ end }}<code>{{ $c }}</code>{{ end }}</dd>{{ end }}
+    <dt>Verification</dt><dd>ℝ: {{ $r.real }}; {{ if eq $r.set "logic" }}𝔹: {{ $r.boolean }}{{ else }}ℂ: {{ $r.complex }}{{ end }}</dd>
+    {{- with $r.theorems }}<dt>Lean theorems</dt><dd>{{ range $i, $t := . }}{{ if $i }}, {{ end }}<code>{{ $t }}</code>{{ end }}</dd>{{ end }}
+    {{- range $r.findings }}<dt>Finding</dt><dd>{{ . }}</dd>{{ end }}
+    {{- with $r.rubi }}<dt>RUBI source</dt><dd>{{ . }}</dd>{{ end }}
+    {{- with $r.variant }}<dt>Corrected variant</dt><dd><a href="/findings/?c0={{ . }}"><code>{{ . }}</code></a></dd>{{ end }}
+    {{- with $r.variant_of }}<dt>Corrects</dt><dd><a href="/findings/?c0={{ . }}"><code>{{ . }}</code></a></dd>{{ end }}
+    <dt>Provenance</dt><dd>{{ partial "osr/prov.html" $r.provenance }} <code>{{ $r.provenance.path }}</code>{{ with $r.provenance.source_digest }}, Lean source digest <code>{{ substr . 7 8 }}…</code>{{ end }}</dd>
+  </dl>
+</div>

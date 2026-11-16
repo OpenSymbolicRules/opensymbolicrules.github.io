@@ -1,0 +1,41 @@
+{{- $d := hugo.Data.generated -}}
+{{- if not $d }}{{ errorf "data/generated is missing: run `just sitegen` before `hugo`" }}{{ end -}}
+# {{ site.Title }}: full text
+
+> {{ site.Params.description }}
+
+Generated {{ $d.stats.generated }} from the public OpenSymbolicRules repositories at the commits
+cited below; index: {{ "llms.txt" | absURL }}
+
+---
+
+URL: {{ site.Home.Permalink }}
+
+{{ partial "llms/text.html" site.Home }}
+{{ range site.Home.Pages.ByWeight }}
+{{- template "llms-page" . }}
+{{- range .Pages.ByWeight }}{{ template "llms-page" . }}{{ end }}
+{{- end }}
+
+---
+
+# Registry data
+
+One line per rule: id [status] domain | pattern -> replacement | conditions | counterexample or note | source (repository@commit path).
+{{ range $d.registry }}
+- {{ .id }} [{{ .status }}] {{ .domain }} | {{ with .pattern }}{{ . }} -> {{ end }}{{ .replacement }} | {{ delimit .conditions "; " }} | {{ .counterexample }}{{ with .note }}{{ . }}{{ end }} | {{ .provenance.repo }}@{{ .provenance.short }} {{ .provenance.path }}
+{{- end }}
+
+{{- define "llms-page" }}
+
+---
+
+URL: {{ .Permalink }}
+{{ if eq .RelPermalink "/findings/" }}
+# {{ .Title }}
+
+{{ .Description }} The registry is listed in full under "Registry data" at the end of this file.
+{{ else }}
+{{ partial "llms/text.html" . }}
+{{ end }}
+{{- end }}

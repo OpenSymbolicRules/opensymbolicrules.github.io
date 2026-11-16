@@ -1,0 +1,39 @@
+{{- $d := partial "osr/data.html" . -}}
+{{- $rows := $d.registry -}}
+<p class="osr-count" aria-live="polite"><span data-osr-shown>{{ len $rows }}</span> of {{ len $rows }} rules shown.
+  <button type="button" class="osr-reset" data-osr-reset>Reset filters and sort</button></p>
+<div class="osr-table-wrap">
+<table class="osr-table osr-registry" data-osr-registry>
+  <thead>
+    <tr>
+      <th scope="col" data-sort>ID</th>
+      <th scope="col" data-sort>Rule</th>
+      <th scope="col" data-sort data-filter="select">Domain</th>
+      <th scope="col" data-sort data-filter="select">Status</th>
+      <th scope="col" data-sort data-filter="select" title="real numbers">ℝ</th>
+      <th scope="col" data-sort data-filter="select" title="complex numbers, or Boolean values for Logic">ℂ / 𝔹</th>
+      <th scope="col" data-sort>Conditions of validity</th>
+      <th scope="col" data-sort>Counterexample</th>
+      <th scope="col" data-sort>Provenance</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{- range $rows }}
+    <tr id="{{ .id | anchorize }}">
+      <td><code>{{ .id }}</code>{{ with .variant }}<br><small>variant: <a href="#{{ . | anchorize }}">{{ . }}</a></small>{{ end }}{{ with .variant_of }}<br><small>corrects: <a href="#{{ . | anchorize }}">{{ . }}</a></small>{{ end }}</td>
+      <td>{{ with .title }}{{ . }}<br>{{ end }}{{ with .pattern }}<code>{{ . }}</code>{{ end }}{{ with .replacement }} → <code>{{ . }}</code>{{ end }}{{ with .note }}<small>{{ . }}</small>{{ end }}</td>
+      <td>{{ .domain }}</td>
+      <td><span class="osr-badge osr-{{ .status | anchorize }}">{{ .status }}</span></td>
+      <td>{{ .real }}</td>
+      <td>{{ if eq .set "logic" }}{{ .boolean }}{{ else }}{{ .complex }}{{ end }}</td>
+      <td>{{ range $i, $c := .conditions }}{{ if $i }}<br>{{ end }}<code>{{ $c }}</code>{{ end }}{{ with .added_conditions }}<br><small>added: {{ range $i, $c := . }}{{ if $i }}, {{ end }}<code>{{ $c }}</code>{{ end }}</small>{{ end }}</td>
+      <td>{{ .counterexample }}</td>
+      <td>{{ partial "osr/prov.html" .provenance }}{{ with .rubi }}<br><small>{{ . }}</small>{{ end }}</td>
+    </tr>
+  {{- end }}
+  </tbody>
+</table>
+</div>
+{{- with resources.Get "js/registry.js" | minify | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+{{- end }}

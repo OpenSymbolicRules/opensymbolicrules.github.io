@@ -1,0 +1,20 @@
+{{- $d := partial "osr/data.html" . -}}
+{{- $rows := slice -}}
+{{- range $name, $r := $d.repos -}}{{- $rows = $rows | append (merge $r (dict "name" $name "order" (default 99 $r.order))) -}}{{- end -}}
+<div class="osr-table-wrap">
+<table class="osr-table">
+  <thead><tr><th scope="col">Repository</th><th scope="col">Role</th><th scope="col">Description</th><th scope="col">v1 status</th><th scope="col">Commits</th><th scope="col">Head</th></tr></thead>
+  <tbody>
+  {{- range sort $rows "order" }}
+    <tr>
+      <td><a href="{{ .url }}">{{ .name }}</a></td>
+      <td>{{ .kind }}</td>
+      <td>{{ .description }}{{ with .description_source }}{{ with .url }} <a class="osr-src-link" href="{{ . }}" title="source of this description">[src]</a>{{ end }}{{ end }}</td>
+      <td>{{ $name := .name }}{{ range $set, $v := $d.stats.sets }}{{ if eq $v.repo $name }}{{ $v.rules }} rules in <a href="/domains/{{ $set }}/">v1/{{ $set }}</a>{{ range $k, $n := $v.status }}<br><small>{{ $n }} {{ $k }}</small>{{ end }}{{ end }}{{ end }}</td>
+      <td>{{ .commits }}</td>
+      <td><a href="{{ .url }}/commit/{{ .commit }}"><code>{{ .short }}</code></a> <span class="osr-date">{{ .date }}</span></td>
+    </tr>
+  {{- end }}
+  </tbody>
+</table>
+</div>

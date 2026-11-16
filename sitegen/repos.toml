@@ -1,0 +1,40 @@
+# Site configuration for the repository table.  Descriptions are read from
+# Specification/ecosystem.json when the repository is listed there; the
+# entries below only describe the repositories it does not list yet, and give
+# the display order.
+
+[repositories.Specification]
+order = 1
+
+[repositories.Integration]
+order = 2
+
+[repositories.Lean]
+order = 3
+kind = "verification"
+description = "Lean 4 and Mathlib statements, proofs and counterexamples for the v1 rule sets, and the exporter of the verified artifacts."
+
+[repositories.Verification]
+order = 4
+kind = "verification"
+description = "Published verification reports, each identified by the source digest of the Lean checkout that produced it and rechecked byte for byte."
+
+[repositories.Conformance]
+order = 5
+kind = "conformance"
+description = "Conformance suites: rewriting cases that an engine consuming the v1 rule sets must reproduce."
+
+[repositories.Calculus]
+order = 6
+
+[repositories.Algebra]
+order = 7
+
+[repositories.Trigonometry]
+order = 8
+
+[repositories.Logic]
+order = 9
+
+[repositories."OpenSymbolicRules.jl"]
+order = 10

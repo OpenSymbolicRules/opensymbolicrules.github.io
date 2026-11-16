@@ -1,0 +1,4 @@
+{{- /* repository@commit of one checkout: {{< repo-head "Verification" >}} */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $name := .Get 0 -}}
+{{- with index $d.repos $name -}}<a href="{{ .url }}/commit/{{ .commit }}">{{ $name }}@{{ .short }}</a> ({{ .date }}, {{ .commits }} commits){{- else -}}{{ errorf "repository %q is not in the generated data" $name }}{{- end -}}
