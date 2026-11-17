@@ -379,6 +379,9 @@ function build(sources, out; sets = DEFAULT_SETS,
     write_json(joinpath(out, "registry.json"), rows)
     write_json(joinpath(out, "stats.json"), stats)
     write_json(joinpath(out, "repos.json"), repos)
+    ver = joinpath(sources, "Verification")
+    write_json(joinpath(out, "history.json"),
+        isdir(joinpath(ver, ".git")) ? verification_history(ver) : Any[])
     write_json(joinpath(out, "example_rule.json"),
         example_rule === nothing ? Dict() :
         Dict("rule" => example_rule, "provenance" => first(r["provenance"] for r in rows if r["id"] == example)))
@@ -414,6 +417,44 @@ function describe_repos!(repos, sources, config)
             "path" => "sitegen/repos.toml", "commit" => "", "url" => "")
     end
     return repos
+end
+
+const DOMAIN_KEYS = ("proved", "counterexample", "unproved", "certified")
+
+"""
+The progress of the project over time, read from the Verification history: one
+point per report directory `reports/<digest>/`, dated by the commit that added
+it, with the `metrics` of its `*.report.json` files summed over the rule sets.
+"""
+function verification_history(dir)
+    reports = joinpath(dir, "reports")
+    isdir(reports) || return Any[]
+    points = Dict{String,Any}[]
+    for d in readdir(reports)
+        rd = joinpath(reports, d)
+        isdir(rd) || continue
+        added = gitout(dir, "log", "--diff-filter=A", "--reverse", "--format=%H %cI", "--", "reports/$d")
+        isempty(added) && continue
+        commit, stamp = split(first(split(added, '\n')))
+        sets = Dict{String,Int}()
+        dom = Dict(k => Dict(c => 0 for c in DOMAIN_KEYS) for k in ("real", "complex"))
+        for f in sort(readdir(rd))
+            endswith(f, ".report.json") || continue
+            m = get(JSON.parsefile(joinpath(rd, f)), "metrics", nothing)
+            m isa AbstractDict || continue
+            sets[replace(f, ".report.json" => "")] = Int(get(m, "rules_exported", 0))
+            for k in ("real", "complex"), c in DOMAIN_KEYS
+                dom[k][c] += Int(get(get(m, k, Dict()), c, 0))
+            end
+        end
+        isempty(sets) && continue
+        push!(points, Dict{String,Any}("report" => d, "commit" => commit,
+            "time" => stamp, "date" => stamp[1:10], "sets" => sets,
+            "rules" => sum(values(sets)), "real" => dom["real"], "complex" => dom["complex"],
+            "url" => "$ORG_URL/Verification/tree/$commit/reports/$d"))
+    end
+    sort!(points; by = p -> (p["time"], p["rules"]))
+    return points
 end
 
 "Counts read from the Specification, Lean, Conformance and Verification checkouts."

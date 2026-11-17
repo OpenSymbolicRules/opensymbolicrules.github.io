@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- "Progress over time" on the home page: rules exported and their status
+  (proved, refuted, unproved) over ℝ and over ℂ for every Verification
+  report, as two small multiples on one scale with a hover crosshair, direct
+  labels and a table view. `sitegen` reads the series from the Verification
+  history into `data/generated/history.json` (`verification_history`).
+
+### Changed
+- The home page tile on strengthened variants no longer says they are all
+  proved: some are distributed unproved with numerical evidence.
+
 - Registry status "strengthened, unproved" for corrected variants distributed
   with numerical evidence before their proof.
 - Visual identity of the organization (OpenSymbolicRules/.github banner):

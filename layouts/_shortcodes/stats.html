@@ -12,7 +12,7 @@
     <span class="osr-label">Lean 4 / Mathlib proofs and counterexamples</span>
     <span class="osr-src">{{ with $int.build }}{{ .lean_toolchain }}, Mathlib {{ substr .mathlib_revision 0 8 }}{{ end }}</span></div>
   <div class="osr-stat"><span class="osr-num">{{ $int.strengthened }}</span>
-    <span class="osr-label">strengthened variants of refuted RUBI rules, proved</span>
+    <span class="osr-label">strengthened variants of refuted RUBI rules</span>
     <span class="osr-src">Specification V1-R-005e · {{ partial "osr/prov.html" $int.provenance }}</span></div>
   {{- with $s.conformance }}
   <div class="osr-stat"><span class="osr-num">{{ .total }}</span>

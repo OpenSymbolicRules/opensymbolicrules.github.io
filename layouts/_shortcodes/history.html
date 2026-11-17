@@ -1,0 +1,48 @@
+{{- /* Progress over time: one point per Verification report, read by sitegen
+       from the Verification history (data/generated/history.json). */ -}}
+{{- $d := partial "osr/data.html" . -}}
+{{- $h := $d.history -}}
+{{- if $h }}
+{{- $last := index $h (sub (len $h) 1) -}}
+<figure class="osr-history" data-osr-history>
+  <figcaption>Rules exported in <code>v1/</code> rule sets, and their status per domain, for each of the
+    {{ len $h }} reports published by Verification ({{ (index $h 0).date }} to {{ $last.date }}).</figcaption>
+  <div class="osr-history-legend" aria-hidden="true">
+    <span><i class="osr-key osr-key-total"></i>rules exported</span>
+    <span><i class="osr-key osr-key-proved"></i>proved</span>
+    <span><i class="osr-key osr-key-refuted"></i>refuted (counterexample)</span>
+    <span><i class="osr-key osr-key-unproved"></i>unproved</span>
+  </div>
+  <div class="osr-history-charts">
+    <div class="osr-history-panel" data-domain="real" role="img"
+      aria-label="Over ℝ: {{ $last.rules }} rules exported, {{ $last.real.proved }} proved, {{ $last.real.counterexample }} refuted, {{ $last.real.unproved }} unproved at the latest report."><h4>Over ℝ</h4></div>
+    <div class="osr-history-panel" data-domain="complex" role="img"
+      aria-label="Over ℂ: {{ $last.rules }} rules exported, {{ $last.complex.proved }} proved, {{ $last.complex.counterexample }} refuted, {{ $last.complex.unproved }} unproved at the latest report."><h4>Over ℂ</h4></div>
+  </div>
+  <div class="osr-history-tip" hidden></div>
+  <script type="application/json" data-osr-history-data>{{ $h | jsonify | safeJS }}</script>
+  <details class="osr-history-table">
+    <summary>Table of the {{ len $h }} reports</summary>
+    <div class="osr-table-wrap">
+    <table class="osr-table">
+      <thead><tr><th scope="col">Date</th><th scope="col">Report</th><th scope="col">Rules</th>
+        <th scope="col">ℝ proved</th><th scope="col">ℝ refuted</th><th scope="col">ℝ unproved</th>
+        <th scope="col">ℂ proved</th><th scope="col">ℂ refuted</th><th scope="col">ℂ unproved</th></tr></thead>
+      <tbody>
+      {{- range $h }}
+        <tr><td>{{ .date }}</td><td><a href="{{ .url }}"><code>{{ substr .report 0 8 }}</code></a></td><td>{{ .rules }}</td>
+          <td>{{ .real.proved }}</td><td>{{ .real.counterexample }}</td><td>{{ .real.unproved }}</td>
+          <td>{{ .complex.proved }}</td><td>{{ .complex.counterexample }}</td><td>{{ .complex.unproved }}</td></tr>
+      {{- end }}
+      </tbody>
+    </table>
+    </div>
+  </details>
+  <p class="osr-src">Each point is a directory <code>reports/&lt;digest&gt;/</code> of
+    <a href="https://github.com/OpenSymbolicRules/Verification">Verification</a>, dated by the commit that added it;
+    the counts are the <code>metrics</code> of its <code>*.report.json</code> files, summed over the rule sets.</p>
+</figure>
+{{- with resources.Get "js/history.js" | minify | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+{{- end }}
+{{- end }}

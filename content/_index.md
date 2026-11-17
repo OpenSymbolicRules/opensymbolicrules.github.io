@@ -22,6 +22,10 @@ rules become auditable objects instead of opaque system code.
 
 {{< stats >}}
 
+## Progress over time
+
+{{< history >}}
+
 ## Repositories
 
 {{< repos >}}

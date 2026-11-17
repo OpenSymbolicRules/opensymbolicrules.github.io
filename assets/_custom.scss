@@ -133,3 +133,61 @@ $osr-cream: #f5eee5;
   border-radius: 0.25rem;
   font-size: 0.9rem;
 }
+
+// Progress over time (shortcode `history`). Series colors: the first three
+// slots of the validated categorical palette (blue, orange, aqua), stepped for
+// the light and the navy surface; the total is neutral ink.
+.osr-history {
+  --osr-s-total: var(--osr-neutral);
+  --osr-s-proved: #2a78d6;
+  --osr-s-refuted: #eb6834;
+  --osr-s-unproved: #1baf7a;
+  position: relative;
+  margin: 1rem 0 1.5rem;
+  figcaption { margin-bottom: 0.5rem; }
+  @media (prefers-color-scheme: dark) {
+    --osr-s-proved: #3987e5;
+    --osr-s-refuted: #d95926;
+    --osr-s-unproved: #199e70;
+  }
+}
+.osr-history-legend {
+  display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.85rem;
+  span { display: inline-flex; align-items: center; gap: 0.35rem; }
+}
+.osr-key {
+  display: inline-block; width: 1rem; height: 0; border-top: 2px solid currentColor; margin-right: 0.3rem;
+  vertical-align: middle;
+}
+.osr-key-total { border-top: 2px dashed var(--osr-s-total); }
+.osr-key-proved { border-top-color: var(--osr-s-proved); }
+.osr-key-refuted { border-top-color: var(--osr-s-refuted); }
+.osr-key-unproved { border-top-color: var(--osr-s-unproved); }
+.osr-history-charts {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem;
+  h4 { margin: 0.5rem 0 0; font-size: 0.95rem; }
+}
+.osr-history-svg {
+  width: 100%; height: auto; overflow: visible;
+  .osr-grid line { stroke: var(--gray-200); stroke-width: 1; }
+  .osr-tick, .osr-end { fill: currentColor; font-size: 11px; }
+  .osr-tick { opacity: 0.75; }
+  .osr-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .osr-line-total { stroke: var(--osr-s-total); stroke-dasharray: 5 4; }
+  .osr-line-proved { stroke: var(--osr-s-proved); }
+  .osr-line-refuted { stroke: var(--osr-s-refuted); }
+  .osr-line-unproved { stroke: var(--osr-s-unproved); }
+  .osr-cross { stroke: currentColor; stroke-width: 1; opacity: 0.5; }
+  .osr-dot { stroke: var(--body-background); stroke-width: 2; }
+  .osr-dot-total { fill: var(--osr-s-total); }
+  .osr-dot-proved { fill: var(--osr-s-proved); }
+  .osr-dot-refuted { fill: var(--osr-s-refuted); }
+  .osr-dot-unproved { fill: var(--osr-s-unproved); }
+  .osr-hit { fill: transparent; cursor: crosshair; }
+  .osr-hit:focus { outline: 2px solid var(--color-link); }
+}
+.osr-history-tip {
+  position: absolute; z-index: 2; pointer-events: none; padding: 0.4rem 0.6rem;
+  background: var(--body-background); border: 1px solid var(--gray-200); border-radius: 0.3rem;
+  font-size: 0.8rem; line-height: 1.4; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}

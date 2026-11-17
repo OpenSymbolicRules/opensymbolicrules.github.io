@@ -21,6 +21,7 @@ No figure on this site is typed by hand. At build time,
 | Requirements | `Specification/docs/osr-v1.md` |
 | Conformance cases | `Conformance/suites/<set>/<set>.cases.json` |
 | Verification reports | the directories of `Verification/reports/` |
+| Progress over time (home page) | one point per directory `Verification/reports/<digest>/`, dated by the commit that added it (`git log --diff-filter=A`), with the `metrics` of its `*.report.json` files summed over the rule sets |
 | Commits | `git rev-parse`, `git log` and `git rev-list --count` of each checkout |
 | Visual identity (banner, logo, favicon, preview image) | `profile/assets/banner.png` of the organization repository `OpenSymbolicRules/.github`, derived by `scripts/brand-assets.py` |
 

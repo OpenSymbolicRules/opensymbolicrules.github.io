@@ -67,6 +67,13 @@ Integration audit reports as not migrated. Its statuses are computed by
 `SiteGen.classify` from the `verification` records and the `findings`
 (`counterexample:`, `strengthened:`) of each rule.
 
+The "Progress over time" chart of the home page (shortcode `history`) is
+drawn from `data/generated/history.json`, which `SiteGen.verification_history`
+reads from the history of the Verification checkout: one point per
+`reports/<digest>/` directory, dated by the commit that added it, with the
+`metrics` of its `*.report.json` files summed over the rule sets. The
+checkout must therefore be a full clone, as `scripts/fetch-sources.sh` makes.
+
 ## Add a finding page
 
 A finding page explains a notable rule; its data come from the registry.
