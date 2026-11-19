@@ -25,8 +25,9 @@ to make that distinction clearer.
 ## Computer algebra system benchmarks
 
 [Computer algebra system benchmarks](https://s-celles.github.io/computer_algebra_system_benchmarks/)
-([source](https://github.com/s-celles/computer_algebra_system_benchmarks),
-MIT) pins the [Integration](https://github.com/OpenSymbolicRules/Integration)
+([source](https://github.com/s-celles/computer_algebra_system_benchmarks);
+code under MIT, data and site content under CC BY 4.0, third-party problem
+statements under their own terms, see its README) pins the [Integration](https://github.com/OpenSymbolicRules/Integration)
 repository as a git submodule and turns its v1 file into a benchmark of
 indefinite integrals ("OSR rules"). The integrand of each rule's pattern is
 sent to every system the benchmark runs (Giac, SymPy, Symbolics.jl, Maxima,
