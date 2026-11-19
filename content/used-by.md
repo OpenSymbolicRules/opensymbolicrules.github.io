@@ -9,6 +9,19 @@ description: Projects that consume the OpenSymbolicRules rule sets.
 Projects that read the OSR v1 files. To be listed, open an issue or a pull
 request on this site's repository.
 
+## OpenSymbolicRules.jl
+
+[OpenSymbolicRules.jl](https://github.com/OpenSymbolicRules/OpenSymbolicRules.jl)
+([documentation](https://OpenSymbolicRules.github.io/OpenSymbolicRules.jl/dev),
+MIT) is a Julia rewrite engine built on
+[SymbolicUtils.jl](https://github.com/JuliaSymbolics/SymbolicUtils.jl). It
+loads OSR v1 files at macro-expansion time (`@load_osr`), combines rules from
+several domains into one engine and can trace every rewrite with its stable
+OSR rule `id`; its test fixtures are refreshed from each Verification report.
+It is a client of the rule sets, not part of them: OSR is the format and the
+rules, the package is one engine that applies them, and its name may change
+to make that distinction clearer.
+
 ## Computer algebra system benchmarks
 
 [Computer algebra system benchmarks](https://s-celles.github.io/computer_algebra_system_benchmarks/)
