@@ -26,6 +26,8 @@ rules become auditable objects instead of opaque system code.
 
 {{< history >}}
 
+Every report, as a table and per rule set: [History](/history/).
+
 ## Repositories
 
 {{< repos >}}

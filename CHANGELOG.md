@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- "History" page: the progress-over-time charts with the table of every
+  Verification report open (newest first) and the rules exported per rule
+  set; the home page links to it.
 - "Used by" page listing the projects that consume the OSR v1 files:
   OpenSymbolicRules.jl and the computer algebra system benchmarks.
 - "Progress over time" on the home page: rules exported and their status

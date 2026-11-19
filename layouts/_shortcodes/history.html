@@ -2,6 +2,9 @@
        from the Verification history (data/generated/history.json). */ -}}
 {{- $d := partial "osr/data.html" . -}}
 {{- $h := $d.history -}}
+{{- /* full=true (the History page): the table is open, newest first, and a
+       second table gives the rules exported per rule set. */ -}}
+{{- $full := eq (.Get "full") "true" -}}
 {{- if $h }}
 {{- $last := index $h (sub (len $h) 1) -}}
 <figure class="osr-history" data-osr-history>
@@ -21,7 +24,7 @@
   </div>
   <div class="osr-history-tip" hidden></div>
   <script type="application/json" data-osr-history-data>{{ $h | jsonify | safeJS }}</script>
-  <details class="osr-history-table">
+  <details class="osr-history-table"{{ if $full }} open{{ end }}>
     <summary>Table of the {{ len $h }} reports</summary>
     <div class="osr-table-wrap">
     <table class="osr-table">
@@ -29,7 +32,7 @@
         <th scope="col">ℝ proved</th><th scope="col">ℝ refuted</th><th scope="col">ℝ unproved</th>
         <th scope="col">ℂ proved</th><th scope="col">ℂ refuted</th><th scope="col">ℂ unproved</th></tr></thead>
       <tbody>
-      {{- range $h }}
+      {{- range (cond $full (collections.Reverse $h) $h) }}
         <tr><td>{{ .date }}</td><td><a href="{{ .url }}"><code>{{ substr .report 0 8 }}</code></a></td><td>{{ .rules }}</td>
           <td>{{ .real.proved }}</td><td>{{ .real.counterexample }}</td><td>{{ .real.unproved }}</td>
           <td>{{ .complex.proved }}</td><td>{{ .complex.counterexample }}</td><td>{{ .complex.unproved }}</td></tr>
@@ -38,6 +41,26 @@
     </table>
     </div>
   </details>
+  {{- if $full }}
+  {{- $sets := slice -}}
+  {{- range $k, $v := $last.sets }}{{ $sets = $sets | append $k }}{{ end -}}
+  <details class="osr-history-table" open>
+    <summary>Rules exported per rule set</summary>
+    <div class="osr-table-wrap">
+    <table class="osr-table">
+      <thead><tr><th scope="col">Date</th><th scope="col">Report</th>
+        {{- range $sets }}<th scope="col">{{ . | title }}</th>{{ end }}</tr></thead>
+      <tbody>
+      {{- range (collections.Reverse $h) }}
+        {{- $r := . }}
+        <tr><td>{{ .date }}</td><td><a href="{{ .url }}"><code>{{ substr .report 0 8 }}</code></a></td>
+          {{- range $sets }}<td>{{ index $r.sets . | default "—" }}</td>{{ end }}</tr>
+      {{- end }}
+      </tbody>
+    </table>
+    </div>
+  </details>
+  {{- end }}
   <p class="osr-src">Each point is a directory <code>reports/&lt;digest&gt;/</code> of
     <a href="https://github.com/OpenSymbolicRules/Verification">Verification</a>, dated by the commit that added it;
     the counts are the <code>metrics</code> of its <code>*.report.json</code> files, summed over the rule sets.</p>
