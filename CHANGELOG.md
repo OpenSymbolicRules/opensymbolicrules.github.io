@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- "Used by" page listing the projects that consume the OSR v1 files,
+  starting with the computer algebra system benchmarks.
 - "Progress over time" on the home page: rules exported and their status
   (proved, refuted, unproved) over ℝ and over ℂ for every Verification
   report, as two small multiples on one scale with a hover crosshair, direct
