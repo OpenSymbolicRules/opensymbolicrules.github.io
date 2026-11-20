@@ -14,7 +14,7 @@ by the Lean verification. Filter any column with the fields under the headers;
 click a header to sort, and shift-click further headers to sort by several
 columns. A filter accepts several words, all of which must match.
 
-Statuses:
+Statuses (see also the [Vocabulary](/vocabulary/)):
 
 - **proved**: a Lean proof in every supported domain;
 - **refuted**: a Lean counterexample in at least one domain;

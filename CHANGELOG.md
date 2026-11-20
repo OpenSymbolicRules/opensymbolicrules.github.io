@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- "Vocabulary" page: the terms of the site and of the OSR v1
+  specification (certified, refuted, strengthened variant, residual
+  integral, fragment, …) in one place, with the requirements that define them.
 - "History" page: the progress-over-time charts with the table of every
   Verification report open (newest first) and the rules exported per rule
   set; the home page links to it.
