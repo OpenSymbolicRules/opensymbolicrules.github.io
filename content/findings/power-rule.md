@@ -21,6 +21,12 @@ expression from a defined one. Lean establishes the counterexample:
 
 {{< rule id="calculus.derivative.power" >}}
 
+With the condition `n ≠ 0`, the rule holds over ℝ and over ℂ; the corrected
+variant is proved, and an engine applies it whenever `n` is a number other
+than `0`, so `d/dx x³ = 3 x²` is rewritten while `x⁰` and `xⁿ` are left alone:
+
+{{< rule id="calculus.derivative.power_nonzero" >}}
+
 ## The antiderivative of a power of a linear function
 
 RUBI 4.16.1 rule 1.1.1.1 #4 integrates `(a + b x)^m` under the single

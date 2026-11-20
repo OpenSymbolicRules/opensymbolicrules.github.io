@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- The power-rule finding shows the strengthened derivative power rule
+  `calculus.derivative.power_nonzero` (`n ≠ 0`), proved over ℝ and ℂ.
 - "Vocabulary" page: the terms of the site and of the OSR v1
   specification (certified, refuted, strengthened variant, residual
   integral, fragment, …) in one place, with the requirements that define them.
