@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Link corrected rules to the original rather than a generalized variant when
+  multiple derived rules share a legacy identifier.
+
 ### Added
+- Label independently proved generalized variants separately in the findings
+  registry, preserving the distinction from faithful RUBI transcriptions.
 - The power-rule finding shows the strengthened derivative power rule
   `calculus.derivative.power_nonzero` (`n ≠ 0`), proved over ℝ and ℂ.
 - "Vocabulary" page: the terms of the site and of the OSR v1

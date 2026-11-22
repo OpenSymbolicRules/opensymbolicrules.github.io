@@ -69,6 +69,29 @@ end
     end
 end
 
+@testitem "generalization does not replace the refuted original" begin
+    include("fixtures.jl")
+    using SiteGen, JSON
+    mktempdir() do root
+        src = joinpath(root, "sources")
+        mkpath(src)
+        fixture_repo(src, "Integration", "integration", [
+            fixture_rule("integration.b"; status = "counterexample"),
+            fixture_rule("integration.b_nondegenerate";
+                findings = ["strengthened: a denominator condition is added."]),
+            fixture_rule("integration.b_order_free";
+                findings = ["generalized: order assumptions are removed."])] )
+        out = joinpath(root, "data")
+        SiteGen.build(src, out; sets = ["integration" => "Integration"])
+        byid = Dict(r["id"] => r for r in JSON.parsefile(joinpath(out, "registry.json")))
+        @test byid["integration.b"]["status"] == "refuted, corrected"
+        @test byid["integration.b"]["variant"] == "integration.b_nondegenerate"
+        @test byid["integration.b_nondegenerate"]["variant_of"] == "integration.b"
+        @test byid["integration.b_order_free"]["status"] == "generalized"
+        @test byid["integration.b_order_free"]["variant"] == ""
+    end
+end
+
 @testitem "size of the v0.1 source corpus" begin
     include("fixtures.jl")
     using SiteGen, JSON

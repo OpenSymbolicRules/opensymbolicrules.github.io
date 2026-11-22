@@ -170,13 +170,15 @@ finding(rule, prefix) = (i = findfirst(f -> startswith(f, prefix), get(rule, "fi
 """
     classify(rule, corrected) -> String
 
-`"strengthened"` for a corrected variant (a `strengthened:` finding and a
+`"generalized"` for an independently proved derived variant with replaced
+conditions; `"strengthened"` for a corrected variant (a `strengthened:` finding and a
 proof), `"strengthened, unproved"` for one distributed with numerical
 evidence only, `"refuted, corrected"` for a refuted rule whose id is in `corrected`,
 then `"refuted"`, `"proved"`, `"unsupported"` or `"unproved"`.
 """
 function classify(rule, corrected)
     st = statuses(rule)
+    has_finding(rule, "generalized:") && "proved" in st && return "generalized"
     if has_finding(rule, "strengthened:")
         "proved" in st && return "strengthened"
         "counterexample" in st || return "strengthened, unproved"
@@ -308,7 +310,8 @@ function build(sources, out; sets = DEFAULT_SETS,
         originals = Dict{String,Any}()
         for r in rules
             lid = string(get(r, "legacy_id", ""))
-            haskey(variants, lid) && variants[lid] !== r && (originals[lid] = r)
+            haskey(variants, lid) && !has_finding(r, "strengthened:") &&
+                !has_finding(r, "generalized:") && (originals[lid] = r)
         end
         corrected = Set(r["id"] for r in values(originals))
         prov = provenance(repo, info, path, digest)

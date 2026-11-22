@@ -23,6 +23,8 @@ Statuses (see also the [Vocabulary](/vocabulary/)):
   non-degeneracy condition, proved (Specification V1-R-005e);
 - **strengthened, unproved**: a corrected variant distributed before its
   proof, with the numerical evidence given in a `numerical:` finding;
+- **generalized**: an independently proved derived variant whose conditions
+  differ from the RUBI source; the source rule remains available;
 - **unproved**, **unsupported**: no proof or counterexample yet, or a
   condition with no meaning in the domain;
 - **not migrated**: considered, but not expressible in OSR v1 yet (the reason
