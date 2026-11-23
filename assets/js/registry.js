@@ -107,7 +107,16 @@
 
   // Restore the state from the URL query.
   const q = new URLSearchParams(location.search);
-  filters.forEach((f, col) => { const v = q.get("c" + col); if (v !== null) f.value = v; });
+  filters.forEach((f, col) => {
+    const v = q.get("c" + col);
+    if (v === null) return;
+    // Keep a domain filter even when it has no rows yet. Otherwise a select
+    // drops the unknown value and a deep link misleadingly shows every rule.
+    if (f.tagName === "SELECT" && v && !Array.from(f.options).some((o) => o.value === v)) {
+      f.appendChild(new Option(v, v));
+    }
+    f.value = v;
+  });
   const sort = q.get("sort");
   if (sort) sortKeys = sort.split(",").filter(Boolean).map((s) => ({ col: Math.abs(parseInt(s, 10)), dir: s.startsWith("-") ? -1 : 1 }))
     .filter((k) => k.col < heads.length);

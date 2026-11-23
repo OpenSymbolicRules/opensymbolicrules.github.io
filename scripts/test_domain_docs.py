@@ -21,6 +21,13 @@ def git(repo, *args):
 
 
 class DomainDocsTests(unittest.TestCase):
+    def test_each_domain_links_to_its_filtered_rules(self):
+        root = Path(__file__).resolve().parent.parent
+        for name in module.DOMAINS:
+            with self.subTest(domain=name):
+                page = (root / 'content' / 'domains' / name.lower() / '_index.md').read_text()
+                self.assertIn(f'](/findings/?c2={name})', page)
+
     def test_empty_repositories_get_honest_placeholder_pages(self):
         with tempfile.TemporaryDirectory() as root:
             source, dest = Path(root) / 'sources', Path(root) / 'out'

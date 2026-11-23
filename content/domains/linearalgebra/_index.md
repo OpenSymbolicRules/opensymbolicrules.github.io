@@ -8,6 +8,11 @@ description: Abstract matrix and vector rule pilot.
 
 Abstract matrices and vectors, their dimensions and conditional rewrite rules.
 
+## Rules
+
+[View LinearAlgebra rules in the registry](/findings/?c2=LinearAlgebra).
+There are no published v1 rules for this domain yet.
+
 ## Status
 
 Research and numerical pilot. Mathematical identities have been checked in

@@ -12,12 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   section, each with status and collected repository documentation.
 
 ### Fixed
+- Preserve a registry filter from a link when its domain has no published
+  rules, rather than displaying unrelated rules.
 - Show the evaluation argument of a residual integral when a rule applies a
   substitution, so the findings registry preserves the replacement formula.
 - Link corrected rules to the original rather than a generalized variant when
   multiple derived rules share a legacy identifier.
 
 ### Added
+- Add a consistently placed link from every domain to its filtered rules table.
 - Collect committed documentation for LinearAlgebra, TensorAlgebra and
   DifferentialGeometry, with source revision links and placeholders for empty
   repositories, without classifying the content as verified rule sets.

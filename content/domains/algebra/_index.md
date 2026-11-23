@@ -8,6 +8,10 @@ description: The Algebra rule set of OpenSymbolicRules, its verification status 
 
 Algebraic simplification, exponent, logarithm and polynomial rules. Rules whose conditions have no meaning over ℂ (positivity) are unsupported there.
 
+## Rules
+
+[View Algebra rules in the registry](/findings/?c2=Algebra).
+
 ## Status
 
 {{< domain set="algebra" >}}

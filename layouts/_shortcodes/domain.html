@@ -32,8 +32,7 @@
   </tbody>
 </table>
 
-<p>Format <code>{{ $s.osr_format }}</code>{{ with $s.build }}; verified with <code>{{ .lean_toolchain }}</code>, Mathlib <code>{{ substr .mathlib_revision 0 8 }}</code>, Lean source digest <code>{{ substr .source_digest 7 8 }}…</code>{{ end }}.
-<a href="/findings/?c2={{ $s.repo }}">All {{ $s.repo }} rules in the registry</a>.</p>
+<p>Format <code>{{ $s.osr_format }}</code>{{ with $s.build }}; verified with <code>{{ .lean_toolchain }}</code>, Mathlib <code>{{ substr .mathlib_revision 0 8 }}</code>, Lean source digest <code>{{ substr .source_digest 7 8 }}…</code>{{ end }}.</p>
 
 {{- with $s.profiles }}
 <p>Profiles (named subsets of rules an engine applies together): {{ range $k, $v := . }}<code>{{ $k }}</code> ({{ $v }} rules) {{ end }}</p>

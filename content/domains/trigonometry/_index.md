@@ -8,6 +8,10 @@ description: The Trigonometry rule set of OpenSymbolicRules, its verification st
 
 Trigonometric identities, organised in profiles (for example sum-to-product rewriting).
 
+## Rules
+
+[View Trigonometry rules in the registry](/findings/?c2=Trigonometry).
+
 ## Status
 
 {{< domain set="trigonometry" >}}

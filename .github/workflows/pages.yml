@@ -34,6 +34,8 @@ jobs:
         run: julia --project=sitegen -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
       - name: Domain documentation collector tests
         run: python3 -I scripts/test_domain_docs.py
+      - name: Registry filter tests
+        run: node assets/js/registry.test.js
       - name: Clone the source repositories (read-only)
         run: scripts/fetch-sources.sh .sources
       - name: Generate data
