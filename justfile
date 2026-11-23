@@ -16,12 +16,14 @@ sources:
 # Generate data/generated/ and the brand assets from the checkouts.
 sitegen:
 	julia --project=sitegen scripts/sitegen.jl {{sources}} data/generated
+	python3 -I scripts/collect_domain_docs.py {{sources}} content/domain-docs
 	python3 -I scripts/brand-assets.py {{sources}}/.github/profile/assets/banner.png static/generated/brand
 
 # Run the generator tests.
 test:
 	julia --project=sitegen -e 'using Pkg; Pkg.test()'
 	python3 -I scripts/test_brand_assets.py
+	python3 -I scripts/test_domain_docs.py
 
 # Build the site into public/ (no warning allowed), then check its internal links.
 build: sitegen

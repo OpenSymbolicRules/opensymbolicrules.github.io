@@ -38,3 +38,18 @@ order = 9
 
 [repositories."OpenSymbolicRules.jl"]
 order = 10
+
+[repositories.LinearAlgebra]
+order = 11
+kind = "domain pilot"
+description = "Research and pilot design for abstract matrix and vector rewrite rules."
+
+[repositories.TensorAlgebra]
+order = 12
+kind = "future domain"
+description = "Planned domain for abstract tensors, tensor products and contractions."
+
+[repositories.DifferentialGeometry]
+order = 13
+kind = "future domain"
+description = "Planned domain for intrinsic geometry, differential forms and connections."

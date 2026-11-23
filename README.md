@@ -44,6 +44,14 @@ any broken internal link (pages, anchors, and the links of `llms.txt` and
    from the same pages and data.
 4. `scripts/check-links.jl` checks the internal links of the output.
 
+The three emerging domain repositories are collected separately from the
+verified v1 rule sets. `scripts/collect_domain_docs.py` imports committed
+Markdown under `docs/` and the repository README into generated Hugo pages,
+with source commit links. Empty repositories receive a pending placeholder;
+Git access failures are errors. The collector never treats this documentation
+as a certified rule set. Relative Markdown links point to their source revision
+on GitHub; generated pages are rebuilt, not edited by hand.
+
 The visual identity comes from the organization profile repository
 (`OpenSymbolicRules/.github`, `profile/assets/banner.png`):
 `scripts/brand-assets.py` (Python, Pillow) copies the banner and derives the

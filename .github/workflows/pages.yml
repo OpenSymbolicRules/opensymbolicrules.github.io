@@ -32,10 +32,14 @@ jobs:
         run: scripts/install-tools.sh .tools
       - name: Generator tests
         run: julia --project=sitegen -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - name: Domain documentation collector tests
+        run: python3 -I scripts/test_domain_docs.py
       - name: Clone the source repositories (read-only)
         run: scripts/fetch-sources.sh .sources
       - name: Generate data
         run: julia --project=sitegen scripts/sitegen.jl .sources data/generated
+      - name: Collect domain documentation
+        run: python3 -I scripts/collect_domain_docs.py .sources content/domain-docs
       - name: Brand assets from OpenSymbolicRules/.github
         run: |
           python3 -m venv "$RUNNER_TEMP/venv"

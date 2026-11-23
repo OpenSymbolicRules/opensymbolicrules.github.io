@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   multiple derived rules share a legacy identifier.
 
 ### Added
+- Collect committed documentation for LinearAlgebra, TensorAlgebra and
+  DifferentialGeometry, with source revision links and placeholders for empty
+  repositories, without classifying the content as verified rule sets.
 - Label independently proved generalized variants separately in the findings
   registry, preserving the distinction from faithful RUBI transcriptions.
 - The power-rule finding shows the strengthened derivative power rule

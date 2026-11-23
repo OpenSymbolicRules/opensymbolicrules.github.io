@@ -16,3 +16,7 @@ published Verification report.
 - [Algebra](algebra/): algebraic simplification.
 - [Trigonometry](trigonometry/): trigonometric identities.
 - [Logic](logic/): propositional rules over the Boolean domain.
+
+For documentation of the emerging LinearAlgebra, TensorAlgebra and
+DifferentialGeometry repositories, see [domain documentation](/domain-docs/).
+These projects do not yet publish verified v1 rule sets.
