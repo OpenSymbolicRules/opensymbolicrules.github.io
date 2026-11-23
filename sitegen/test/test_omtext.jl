@@ -12,6 +12,9 @@
     # A residual integral int(λx. H)(x) is an OMA whose applicant is an OMA.
     resid = oma(oma(oms("calculus1", "int"), lam("x", omv("x"))), omv("x"))
     @test om_text(resid) == "∫ x dx"
+    subst = oma(oma(oms("calculus1", "int"), lam("x", omv("x"))),
+        oma(oms("arith1", "plus"), omv("a"), omv("x")))
+    @test om_text(subst) == "(∫ x dx)(a + x)"
     @test om_text(lam("x", omv("x"))) == "λx. x"
     @test om_text(oma(oms("set1", "in"), omv("n"), oms("setname1", "Z"))) == "n ∈ ℤ"
     @test om_text(oma(oms("logic1", "and"), omv("p"), oms("logic1", "true"))) == "p ∧ true"

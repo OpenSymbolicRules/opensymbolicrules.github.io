@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Show the evaluation argument of a residual integral when a rule applies a
+  substitution, so the findings registry preserves the replacement formula.
 - Link corrected rules to the original rather than a generalized variant when
   multiple derived rules share a legacy identifier.
 

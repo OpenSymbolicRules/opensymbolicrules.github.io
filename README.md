@@ -35,6 +35,8 @@ any broken internal link (pages, anchors, and the links of `llms.txt` and
    Conformance suites and the Verification reports, and writes
    `data/generated/{registry,stats,repos,example_rule}.json`. Every record
    carries its provenance (`repo`, `commit`, `path`, `date`).
+   Residual integrals evaluated at a substitution display that argument in
+   the findings registry.
 3. Hugo renders the pages in `content/`; the shortcodes in
    `layouts/_shortcodes/` read only `data/generated/`, so no number is typed
    in a page. `llms.txt` and `llms-full.txt` are Hugo output formats of the

@@ -94,8 +94,15 @@ function om_text(o)::String
     end
     k == "OMA" || return string(o)
     f, args = o["applicant"], o["arguments"]
-    # A residual integral int(λx. H)(x) renders as the integral itself.
-    isint_lambda(f) && return om_text(f)
+    # The bound variable is implicit only when the integral is evaluated at it.
+    if isint_lambda(f)
+        vars = f["arguments"][1]["variables"]
+        if length(vars) == 1 && length(args) == 1 && kind(args[1]) == "OMV" &&
+                args[1]["name"] == vars[1]["name"]
+            return om_text(f)
+        end
+        return string("(", om_text(f), ")(", join(om_text.(args), ", "), ")")
+    end
     kind(f) == "OMS" || return string(paren(f, 5), "(", join(om_text.(args), ", "), ")")
     key = symkey(f)
     if haskey(INFIX, key) && length(args) >= 2
