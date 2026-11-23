@@ -2,21 +2,20 @@
 title: Domains
 weight: 30
 bookCollapseSection: false
-description: The OSR v1 rule sets, one repository per domain.
+description: Mathematical domains, their rule status and documentation.
 ---
 
 # Domains
 
-Each domain is a repository that distributes its verified rule set in `v1/`:
-the rules, a JSON verification report and a Markdown report, copied from a
-published Verification report.
+Each domain has a repository, a status page and collected documentation.
+Established domains also distribute v1 rule sets with verification reports;
+emerging domains are clearly marked while their infrastructure is developed.
 
 - [Integration](integration/): RUBI 4.16.1 antiderivative rules.
 - [Calculus](calculus/): limits and derivatives.
 - [Algebra](algebra/): algebraic simplification.
 - [Trigonometry](trigonometry/): trigonometric identities.
 - [Logic](logic/): propositional rules over the Boolean domain.
-
-For documentation of the emerging LinearAlgebra, TensorAlgebra and
-DifferentialGeometry repositories, see [domain documentation](/domain-docs/).
-These projects do not yet publish verified v1 rule sets.
+- [LinearAlgebra](linearalgebra/): abstract matrices and vectors; pilot.
+- [TensorAlgebra](tensoralgebra/): abstract tensors; planned.
+- [DifferentialGeometry](differentialgeometry/): intrinsic geometry; planned.

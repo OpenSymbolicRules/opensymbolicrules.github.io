@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Unify established and emerging mathematical domains under one Domains
+  section, each with status and collected repository documentation.
+
 ### Fixed
 - Show the evaluation argument of a residual integral when a rule applies a
   substitution, so the findings registry preserves the replacement formula.

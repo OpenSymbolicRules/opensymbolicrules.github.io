@@ -26,8 +26,9 @@ class DomainDocsTests(unittest.TestCase):
             source, dest = Path(root) / 'sources', Path(root) / 'out'
             source.mkdir()
             collect(source, dest)
-            for name in ('LinearAlgebra', 'TensorAlgebra', 'DifferentialGeometry'):
-                page = (dest / name.lower() / '_index.md').read_text()
+            for name in ('Integration', 'Calculus', 'Algebra', 'Trigonometry',
+                         'Logic', 'LinearAlgebra', 'TensorAlgebra', 'DifferentialGeometry'):
+                page = (dest / name.lower() / 'documentation' / '_index.md').read_text()
                 self.assertIn('not yet available', page)
                 self.assertIn(f'github.com/OpenSymbolicRules/{name}', page)
 
@@ -47,22 +48,35 @@ class DomainDocsTests(unittest.TestCase):
             (repo / 'docs' / 'sample.md').write_text('uncommitted edit', encoding='utf-8')
             collect(source, dest)
             stem = 'doc-' + hashlib.sha256(b'docs/sample.md').hexdigest()
-            page = (dest / 'linearalgebra' / 'pages' / (stem + '.md')).read_text()
+            page = (dest / 'linearalgebra' / 'documentation' / 'pages' / (stem + '.md')).read_text()
             self.assertIn(f'github.com/OpenSymbolicRules/LinearAlgebra/blob/{commit}/README.md', page)
             self.assertIn('https://example.org/', page)
             self.assertNotIn('uncommitted edit', page)
             self.assertIn(commit, page)
-            self.assertIn(f'pages/{stem}/', (dest / 'linearalgebra' / '_index.md').read_text())
+            self.assertIn(f'pages/{stem}/', (dest / 'linearalgebra' / 'documentation' / '_index.md').read_text())
 
     def test_refuses_to_replace_non_generated_content(self):
         with tempfile.TemporaryDirectory() as root:
             source, dest = Path(root) / 'sources', Path(root) / 'out'
             source.mkdir()
             dest.mkdir()
-            (dest / 'important.txt').write_text('keep', encoding='utf-8')
+            (dest / 'linearalgebra').mkdir()
+            (dest / 'linearalgebra' / 'documentation').mkdir()
+            (dest / 'linearalgebra' / 'documentation' / 'important.txt').write_text('keep', encoding='utf-8')
             with self.assertRaises(ValueError):
                 collect(source, dest)
-            self.assertEqual((dest / 'important.txt').read_text(), 'keep')
+            self.assertEqual((dest / 'linearalgebra' / 'documentation' / 'important.txt').read_text(), 'keep')
+
+    def test_preserves_existing_domain_pages(self):
+        with tempfile.TemporaryDirectory() as root:
+            source, dest = Path(root) / 'sources', Path(root) / 'out'
+            source.mkdir()
+            dest.mkdir()
+            (dest / '_index.md').write_text('existing domain index', encoding='utf-8')
+            (dest / 'algebra.md').write_text('existing domain', encoding='utf-8')
+            collect(source, dest)
+            self.assertEqual((dest / '_index.md').read_text(), 'existing domain index')
+            self.assertEqual((dest / 'algebra.md').read_text(), 'existing domain')
 
 
 if __name__ == '__main__':

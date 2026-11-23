@@ -8,4 +8,10 @@ description: The Trigonometry rule set of OpenSymbolicRules, its verification st
 
 Trigonometric identities, organised in profiles (for example sum-to-product rewriting).
 
+## Status
+
 {{< domain set="trigonometry" >}}
+
+## Documentation
+
+[Browse the Trigonometry repository documentation](documentation/).

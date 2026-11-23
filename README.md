@@ -44,13 +44,13 @@ any broken internal link (pages, anchors, and the links of `llms.txt` and
    from the same pages and data.
 4. `scripts/check-links.jl` checks the internal links of the output.
 
-The three emerging domain repositories are collected separately from the
-verified v1 rule sets. `scripts/collect_domain_docs.py` imports committed
-Markdown under `docs/` and the repository README into generated Hugo pages,
+Every mathematical domain has a page under `Domains`, with status and
+documentation. `scripts/collect_domain_docs.py` imports committed Markdown
+under `docs/` and the repository README into generated documentation pages,
 with source commit links. Empty repositories receive a pending placeholder;
-Git access failures are errors. The collector never treats this documentation
-as a certified rule set. Relative Markdown links point to their source revision
-on GitHub; generated pages are rebuilt, not edited by hand.
+Git access failures are errors. The collector never treats documentation as a
+certified rule set. Relative Markdown links point to their source revision on
+GitHub; generated pages are rebuilt, not edited by hand.
 
 The visual identity comes from the organization profile repository
 (`OpenSymbolicRules/.github`, `profile/assets/banner.png`):
@@ -102,8 +102,11 @@ A finding page explains a notable rule; its data come from the registry.
    `SiteGen.DEFAULT_SETS` (set name and repository), with a test.
 2. Describe it in `Specification/ecosystem.json` upstream, or in
    `sitegen/repos.toml` while it is not listed there (with its `order`).
-3. Write `content/domains/<set>.md` with `{{< domain set="<set>" >}}` and
-   link it from `content/domains/_index.md`.
+3. Write `content/domains/<set>/_index.md` with status and documentation
+   sections; use `{{< domain set="<set>" >}}` for an exported v1 set. Link it
+   from `content/domains/_index.md` and link its documentation as
+   `documentation/`.
+4. Add the repository to `DOMAINS` in `scripts/collect_domain_docs.py`.
 
 ## Layout
 

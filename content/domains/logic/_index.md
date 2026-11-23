@@ -8,4 +8,10 @@ description: The Logic rule set of OpenSymbolicRules, its verification status an
 
 Propositional and quantifier rules, stated and proved in the Boolean domain 𝔹.
 
+## Status
+
 {{< domain set="logic" >}}
+
+## Documentation
+
+[Browse the Logic repository documentation](documentation/).

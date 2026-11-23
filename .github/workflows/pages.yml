@@ -39,7 +39,7 @@ jobs:
       - name: Generate data
         run: julia --project=sitegen scripts/sitegen.jl .sources data/generated
       - name: Collect domain documentation
-        run: python3 -I scripts/collect_domain_docs.py .sources content/domain-docs
+        run: python3 -I scripts/collect_domain_docs.py .sources content/domains
       - name: Brand assets from OpenSymbolicRules/.github
         run: |
           python3 -m venv "$RUNNER_TEMP/venv"

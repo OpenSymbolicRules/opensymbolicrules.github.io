@@ -16,7 +16,7 @@ sources:
 # Generate data/generated/ and the brand assets from the checkouts.
 sitegen:
 	julia --project=sitegen scripts/sitegen.jl {{sources}} data/generated
-	python3 -I scripts/collect_domain_docs.py {{sources}} content/domain-docs
+	python3 -I scripts/collect_domain_docs.py {{sources}} content/domains
 	python3 -I scripts/brand-assets.py {{sources}}/.github/profile/assets/banner.png static/generated/brand
 
 # Run the generator tests.
