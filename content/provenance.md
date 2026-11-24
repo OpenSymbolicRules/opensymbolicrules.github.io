@@ -14,6 +14,7 @@ No figure on this site is typed by hand. At build time,
 |---|---|
 | Rules, conditions, findings, statuses | `v1/<set>.osr.json` of each domain repository |
 | Rules not migrated, metrics | `v1/<set>.report.json` |
+| Default v0.1 catalogue | Sum of the rule arrays in the files listed in the domain’s `rules/meta.json` load order |
 | Size of the source corpus (v0.1 rules) | the `rules/` tree of each domain repository |
 
 | Lean toolchain, Mathlib revision, source digest | the `build` record of each rule set |
@@ -40,3 +41,5 @@ that reproduces it.
 This build read:
 
 {{< repos >}}
+
+The findings table counts one row per v1 export entry or additional non-migration record. Filters update the visible row count. The daily Pages build fetches the source repositories and recomputes these totals.

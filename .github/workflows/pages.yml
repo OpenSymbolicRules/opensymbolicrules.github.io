@@ -59,7 +59,7 @@ jobs:
           PATH="$PWD/.tools/dart-sass:$PATH" .tools/hugo --minify --panicOnWarning -d public
       - name: Check internal links
         run: julia --project=sitegen scripts/check-links.jl public
-      - name: Check homepage rule counts
+      - name: Check rendered homepage, domain and registry counts
         run: python3 -I scripts/test_home_stats.py public/index.html data/generated/stats.json
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request'

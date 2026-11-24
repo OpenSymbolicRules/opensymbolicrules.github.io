@@ -1,6 +1,10 @@
 {{- $d := partial "osr/data.html" . -}}
 {{- $rows := $d.registry -}}
-<p class="osr-count" aria-live="polite"><span data-osr-shown>{{ len $rows }}</span> of {{ len $rows }} rules shown.
+<p>The registry contains {{ $d.stats.rules_distributed }} exported v1 entries across all domains and
+  {{ len (where $rows "status" "not migrated") }} audit records for rules considered but not migrated.
+  <a href="/domains/integration/">Integration’s default v0.1 catalogue</a> contains
+  {{ $d.stats.sets.integration.default_rules }} entries.</p>
+<p class="osr-count" aria-live="polite"><span data-osr-shown>{{ len $rows }}</span> of {{ len $rows }} registry rows shown.
   <button type="button" class="osr-reset" data-osr-reset>Reset filters and sort</button></p>
 <div class="osr-table-wrap">
 <table class="osr-table osr-registry" data-osr-registry>

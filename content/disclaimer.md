@@ -12,15 +12,12 @@ OpenSymbolicRules is a **long-term, ongoing research effort**, not a
 finished product. Everything on this site describes the state of the
 repositories at the commits shown, and that state changes often.
 
-**Coverage is partial.** The Integration audit has considered
-{{< stat "sets.integration.legacy_rules" >}} of the
-{{< stat "sets.integration.corpus_rules" >}} RUBI 4.16.1 rules of the
-Integration repository; {{< stat "sets.integration.not_migrated" >}} of those
-cannot be stated in OSR v1 yet, and the others are not yet considered at all.
-Most of them rewrite into further integrals, use constructs the format does
-not yet express (square roots and other non-integer powers, special
-functions, RUBI's own helper functions), or carry conditions that have no
-counterpart yet. The Calculus, Algebra, Trigonometry and Logic rule sets are
+**Coverage is partial.** The default Integration v0.1 manifest loads
+{{< stat "sets.integration.default_rules" >}} entries. The verification registry
+covers {{< stat "sets.integration.legacy_rules" >}} distinct legacy identifiers,
+including {{< stat "sets.integration.not_migrated" >}} non-migration records.
+The registry documents the reason for each such record, including unsupported
+operations or conditions. The Calculus, Algebra, Trigonometry and Logic rule sets are
 small, curated sets.
 
 **The format is a pre-release.** OSR v1 is at version

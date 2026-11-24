@@ -2,6 +2,7 @@
 {{- $s := $d.stats -}}
 {{- $int := index $s.sets "integration" -}}
 <div class="osr-stats">
+  {{ partial "osr/default-count.html" $int }}
   <div class="osr-stat"><span class="osr-num">{{ $s.rules_distributed }}</span>
     <span class="osr-label">rules distributed in <code>v1/</code> rule sets</span>
     <span class="osr-src">{{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts " · " }}</span></div>

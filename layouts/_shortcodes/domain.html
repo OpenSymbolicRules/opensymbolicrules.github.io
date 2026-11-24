@@ -5,7 +5,8 @@
 {{- if not $s }}{{ errorf "rule set %q is not in the generated data (%s)" $set .Position }}{{ end -}}
 {{- $repo := index $d.repos $s.repo -}}
 <div class="osr-stats">
-  <div class="osr-stat"><span class="osr-num">{{ $s.rules }}</span><span class="osr-label">rules in <code>v1/{{ $set }}.osr.json</code></span>
+  {{ partial "osr/default-count.html" $s }}
+  <div class="osr-stat"><span class="osr-num">{{ $s.rules }}</span><span class="osr-label">v1 rule entries in <code>v1/{{ $set }}.osr.json</code></span>
     <span class="osr-src">{{ partial "osr/prov.html" $s.provenance }}</span></div>
   {{- if $s.not_migrated }}
   <div class="osr-stat"><span class="osr-num">{{ $s.not_migrated }}</span><span class="osr-label">considered, not migrated (reasons in the registry)</span></div>

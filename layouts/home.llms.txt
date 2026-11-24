@@ -10,12 +10,12 @@ OpenSymbolicRules publishes rewrite rules for computer algebra as JSON data
 (OSR v1: JSON Schema, OpenMath symbols). Each rule states its conditions of
 validity and carries, per domain, a Lean 4 proof or counterexample. Generated
 {{ $s.generated }} from the public repositories: {{ $s.rules_distributed }} rules distributed
-({{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts "; " }}), {{ $int.legacy_rules }} RUBI 4.16.1 rules audited
+({{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts "; " }}), {{ $int.legacy_rules }} distinct RUBI legacy identifiers audited
 ({{ $int.not_migrated }} not migrated), {{ $int.strengthened }} strengthened variants, {{ $s.theorems }} Lean theorems.
 
 Work in progress: a long-term research project, far from complete. The format is a
 pre-release ({{ $int.osr_format }}), statuses change as proofs, counterexamples and corrected
-variants are added, and {{ $int.legacy_rules }} of the {{ $int.corpus_rules }} RUBI rules have been audited so far;
+variants are added, and the default Integration v0.1 manifest loads {{ $int.default_rules }} entries;
 see {{ "disclaimer/" | absURL }}.
 
 ## Pages

@@ -136,3 +136,21 @@ end
         @test stats["repositories"] == 1
     end
 end
+
+@testitem "Default inventory counts only files selected by the manifest" begin
+    using JSON, SiteGen
+    mktempdir() do dir
+        for (name, n) in [("loaded", 2), ("excluded", 3), ("empty", 0)]
+            write(joinpath(dir, name * ".json"), JSON.json(Dict("rules" => fill(Dict(), n))))
+        end
+        manifest(files) = write(joinpath(dir, "meta.json"), JSON.json(Dict("load_order"=>files,"rule_count"=>99)))
+        manifest(["empty.json","loaded.json"])
+        @test SiteGen.source_counts(dir) == (all=5, loaded=2)
+        manifest(["excluded.json"])
+        @test SiteGen.source_counts(dir) == (all=5, loaded=3)
+        manifest(["missing.json"])
+        @test_throws ArgumentError SiteGen.source_counts(dir)
+        manifest(["loaded.json","loaded.json"])
+        @test_throws ArgumentError SiteGen.source_counts(dir)
+    end
+end

@@ -148,15 +148,23 @@ function om_text(o)::String
     return string(name, "(", join(om_text.(args), ", "), ")")
 end
 
-"Number of v0.1 source rules in the `rules/` tree of a repository (`meta.json` excluded)."
-function corpus_rules(dir)
-    isdir(dir) || return 0
-    n = 0
+"Count all v0.1 entries and the subset selected by the default load manifest."
+function source_counts(dir)
+    isdir(dir) || return (all=0, loaded=nothing)
+    counts = Dict{String,Int}()
     for (root, _, files) in walkdir(dir), f in files
         (endswith(f, ".json") && f != "meta.json") || continue
-        n += length(get(JSON.parsefile(joinpath(root, f)), "rules", []))
+        path = joinpath(root, f)
+        counts[relpath(path, dir)] = length(get(JSON.parsefile(path), "rules", []))
     end
-    return n
+    all_count = sum(values(counts); init=0)
+    manifest = joinpath(dir, "meta.json")
+    order = isfile(manifest) ? get(JSON.parsefile(manifest), "load_order", nothing) : nothing
+    isnothing(order) && return (all=all_count, loaded=nothing)
+    order isa AbstractVector && all(p -> p isa AbstractString && haskey(counts, p), order) ||
+        throw(ArgumentError("Invalid load_order in $manifest"))
+    allunique(order) || throw(ArgumentError("Repeated load_order file in $manifest"))
+    return (all=all_count, loaded=sum(p -> counts[p], order; init=0))
 end
 
 "Number of residual integrals `int(λx. H)(x)` in an object."
@@ -365,6 +373,7 @@ function build(sources, out; sets = DEFAULT_SETS,
         end
         migrated = filter(r -> r["status"] != "not migrated", setrows)
         legacy = Set(r["legacy_id"] for r in setrows if !isempty(r["legacy_id"]))
+        inventory = source_counts(joinpath(sources, repo, "rules"))
         stats["sets"][set] = Dict{String,Any}(
             "repo" => repo, "rules" => length(rules), "not_migrated" => length(nm),
             "legacy_rules" => length(legacy), "strengthened" => length(variants),
@@ -374,7 +383,8 @@ function build(sources, out; sets = DEFAULT_SETS,
             "boolean" => count_by(migrated, "boolean"),
             "metrics" => get(report, "metrics", Dict()),
             "osr_format" => get(doc, "osr_format", ""),
-            "corpus_rules" => corpus_rules(joinpath(sources, repo, "rules")),
+            "corpus_rules" => inventory.all, "default_rules" => inventory.loaded,
+            "manifest_provenance" => provenance(repo, info, "rules/meta.json", ""),
             "corpus_path" => "rules",
             "profiles" => Dict(string(k) => length(get(v, "rules", [])) for (k, v) in get(doc, "profiles", Dict())),
             "build" => get(doc, "build", Dict()), "provenance" => prov)

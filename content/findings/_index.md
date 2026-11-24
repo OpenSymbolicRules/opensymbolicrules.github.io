@@ -8,9 +8,7 @@ layout: wide
 
 # Findings registry
 
-Every rule distributed in the `v1/` rule sets, and every RUBI rule the
-Integration audit considered but did not migrate, with the status established
-by the Lean verification. Filter any column with the fields under the headers;
+This table lists the verification status of exported v1 rules and the reasons recorded for source rules considered but not migrated. Filter any column with the fields under the headers;
 click a header to sort, and shift-click further headers to sort by several
 columns. A filter accepts several words, all of which must match.
 

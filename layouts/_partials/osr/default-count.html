@@ -1,0 +1,5 @@
+{{- if ne .default_rules nil }}
+<div class="osr-stat"><span class="osr-num">{{ .default_rules }}</span>
+  <span class="osr-label">{{ .repo }} v0.1 entries in the default load order</span>
+  <span class="osr-src">{{ partial "osr/prov.html" .manifest_provenance }}</span></div>
+{{- end }}

@@ -6,11 +6,11 @@ description: The Integration rule set of OpenSymbolicRules, its verification sta
 
 # Integration
 
-RUBI 4.16.1 antiderivative rules, converted from Mathematica by the Integration converter and audited rule by rule. Rules whose result contains further integrals are stated with [residual integrals](/findings/residual-integrals/); refuted rules keep their counterexample, and [strengthened variants](/findings/strengthened-variants/) correct some of them.
+The Integration converter imports RUBI antiderivative rules. The default v0.1 catalogue includes their matching conditions. The v1 export contains the rules and variants covered by the verification report. Rules whose result contains further integrals are stated with [residual integrals](/findings/residual-integrals/); refuted rules keep their counterexample, and [strengthened variants](/findings/strengthened-variants/) correct some of them.
 
 ## Rules
 
-[View Integration rules in the registry](/findings/?c2=Integration).
+[View Integration verification records in the registry](/findings/?c2=Integration).
 
 ## Status
 
