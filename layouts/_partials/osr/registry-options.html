@@ -1,0 +1,8 @@
+{{- $values := newScratch -}}
+{{- range hugo.Data.generated.registry -}}
+  {{- $values.SetInMap "2" .domain true -}}
+  {{- $values.SetInMap "3" .status true -}}
+  {{- $values.SetInMap "4" .real true -}}
+  {{- $values.SetInMap "5" (cond (eq .set "logic") .boolean .complex) true -}}
+{{- end -}}
+{{- return $values.Values -}}

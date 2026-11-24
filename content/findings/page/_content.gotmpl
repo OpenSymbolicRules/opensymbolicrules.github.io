@@ -1,0 +1,13 @@
+{{- $total := len hugo.Data.generated.registry -}}
+{{- $size := site.Params.registryPageSize -}}
+{{- $pages := math.Ceil (div (float $total) $size) | int -}}
+{{- if ge $pages 2 -}}
+  {{- range seq 2 $pages -}}
+    {{- $.AddPage (dict
+      "path" (string .) "title" (printf "Findings registry · page %d" .)
+      "layout" "wide" "type" "docs" "description" "Browse rule statuses, conditions, counterexamples and provenance."
+      "params" (dict "registryPage" . "bookHidden" true "bookToC" false)
+      "build" (dict "list" "never" "render" "always")
+      "content" (dict "mediaType" "text/markdown" "value" "# Findings registry\n\n{{< registry >}}")) -}}
+  {{- end -}}
+{{- end -}}

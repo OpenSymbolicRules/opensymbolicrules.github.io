@@ -1,0 +1,11 @@
+    <tr id="{{ .id | anchorize }}">
+      <td><code>{{ .id }}</code>{{ with .variant }}<br><small>variant: <a href="{{ partial "osr/registry-target.html" . }}">{{ . }}</a></small>{{ end }}{{ with .variant_of }}<br><small>corrects: <a href="{{ partial "osr/registry-target.html" . }}">{{ . }}</a></small>{{ end }}</td>
+      <td>{{ with .title }}{{ . }}<br>{{ end }}{{ with .pattern }}<code>{{ . }}</code>{{ end }}{{ with .replacement }} → <code>{{ . }}</code>{{ end }}{{ with .note }}<small>{{ . }}</small>{{ end }}</td>
+      <td>{{ .domain }}</td>
+      <td><span class="osr-badge osr-{{ .status | anchorize }}">{{ .status }}</span></td>
+      <td>{{ .real }}</td>
+      <td>{{ if eq .set "logic" }}{{ .boolean }}{{ else }}{{ .complex }}{{ end }}</td>
+      <td>{{ range $i, $c := .conditions }}{{ if $i }}<br>{{ end }}<code>{{ $c }}</code>{{ end }}{{ with .added_conditions }}<br><small>added: {{ range $i, $c := . }}{{ if $i }}, {{ end }}<code>{{ $c }}</code>{{ end }}</small>{{ end }}</td>
+      <td>{{ .counterexample }}</td>
+      <td>{{ partial "osr/prov.html" .provenance }}{{ with .rubi }}<br><small>{{ . }}</small>{{ end }}</td>
+    </tr>

@@ -1,0 +1,2 @@
+{{- $locations := partialCached "osr/registry-locations.html" true -}}
+{{- return (printf "%s#%s" (partial "osr/registry-url.html" (index $locations . | default 1)) (anchorize .)) -}}

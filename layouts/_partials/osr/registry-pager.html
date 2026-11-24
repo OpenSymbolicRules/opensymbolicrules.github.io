@@ -1,0 +1,7 @@
+<nav class="osr-pagination" aria-label="Registry pages">
+  <a data-osr-prev {{ if gt .page 1 }}href="{{ partial "osr/registry-url.html" (sub .page 1) }}"{{ else }}hidden{{ end }}>Previous</a>
+  <span data-osr-range aria-live="polite">{{ if .rows }}{{ add .start 1 }}–{{ math.Min (add .start .size) (len .rows) | int }}{{ else }}0{{ end }} of {{ len .rows }}</span>
+  <a data-osr-next {{ if lt .page .pages }}href="{{ partial "osr/registry-url.html" (add .page 1) }}"{{ else }}hidden{{ end }}>Next</a>
+  <label hidden data-osr-size-label>Rows per page <select data-osr-size aria-label="Rows per page">{{ range slice 100 200 500 1000 }}<option value="{{ . }}" {{ if eq . $.size }}selected{{ end }}>{{ . }}</option>{{ end }}</select></label>
+  <button hidden type="button" class="osr-reset" data-osr-reset>Reset filters and sort</button>
+</nav>

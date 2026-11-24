@@ -4,10 +4,17 @@
   {{ len (where $rows "status" "not migrated") }} audit records for rules considered but not migrated.
   <a href="/domains/integration/">Integration’s default v0.1 catalogue</a> contains
   {{ $d.stats.sets.integration.default_rules }} entries.</p>
-<p class="osr-count" aria-live="polite"><span data-osr-shown>{{ len $rows }}</span> of {{ len $rows }} registry rows shown.
-  <button type="button" class="osr-reset" data-osr-reset>Reset filters and sort</button></p>
+{{- $size := site.Params.registryPageSize | int -}}
+{{- $page := .Page.Params.registryPage | default 1 | int -}}
+{{- $start := mul (sub $page 1) $size -}}
+{{- $pages := math.Ceil (div (float (len $rows)) $size) | int -}}
+{{- $pager := dict "page" $page "size" $size "rows" $rows "pages" $pages "start" $start -}}
+{{ partial "osr/registry-pager.html" $pager }}
+<p hidden data-osr-loading role="status"></p>
 <div class="osr-table-wrap">
-<table class="osr-table osr-registry" data-osr-registry>
+<table class="osr-table osr-registry" data-osr-registry data-page="{{ $page }}" data-size="{{ $size }}" data-total="{{ len $rows }}"
+       data-chunks="{{ partialCached "osr/registry-chunks.html" true | jsonify }}" data-choices="{{ partialCached "osr/registry-options.html" true | jsonify }}"
+       data-index="{{ partialCached "osr/registry-index.html" . }}">
   <thead>
     <tr>
       <th scope="col" data-sort>ID</th>
@@ -22,22 +29,13 @@
     </tr>
   </thead>
   <tbody>
-  {{- range $rows }}
-    <tr id="{{ .id | anchorize }}">
-      <td><code>{{ .id }}</code>{{ with .variant }}<br><small>variant: <a href="#{{ . | anchorize }}">{{ . }}</a></small>{{ end }}{{ with .variant_of }}<br><small>corrects: <a href="#{{ . | anchorize }}">{{ . }}</a></small>{{ end }}</td>
-      <td>{{ with .title }}{{ . }}<br>{{ end }}{{ with .pattern }}<code>{{ . }}</code>{{ end }}{{ with .replacement }} → <code>{{ . }}</code>{{ end }}{{ with .note }}<small>{{ . }}</small>{{ end }}</td>
-      <td>{{ .domain }}</td>
-      <td><span class="osr-badge osr-{{ .status | anchorize }}">{{ .status }}</span></td>
-      <td>{{ .real }}</td>
-      <td>{{ if eq .set "logic" }}{{ .boolean }}{{ else }}{{ .complex }}{{ end }}</td>
-      <td>{{ range $i, $c := .conditions }}{{ if $i }}<br>{{ end }}<code>{{ $c }}</code>{{ end }}{{ with .added_conditions }}<br><small>added: {{ range $i, $c := . }}{{ if $i }}, {{ end }}<code>{{ $c }}</code>{{ end }}</small>{{ end }}</td>
-      <td>{{ .counterexample }}</td>
-      <td>{{ partial "osr/prov.html" .provenance }}{{ with .rubi }}<br><small>{{ . }}</small>{{ end }}</td>
-    </tr>
+  {{- range first $size (after $start $rows) }}
+    {{ partial "osr/registry-row.html" . }}
   {{- end }}
   </tbody>
 </table>
 </div>
+{{ partial "osr/registry-pager.html" $pager }}
 {{- with resources.Get "js/registry.js" | minify | fingerprint }}
 <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
 {{- end }}

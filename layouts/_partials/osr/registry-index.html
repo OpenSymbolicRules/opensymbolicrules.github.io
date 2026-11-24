@@ -1,0 +1,12 @@
+{{- /* Search the same cell text that readers see, fetching the index only on demand. */ -}}
+{{- $index := slice -}}
+{{- range hugo.Data.generated.registry -}}
+  {{- $row := partial "osr/registry-row.html" . -}}
+  {{- $cells := slice -}}
+  {{- range findRE "(?s)<td>.*?</td>" (string $row) -}}
+    {{- $cells = $cells | append (. | replaceRE "<br\\s*/?>" " " | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace) -}}
+  {{- end -}}
+  {{- $index = $index | append (slice (dict "anchor" (anchorize .id) "cells" $cells)) -}}
+{{- end -}}
+{{- $resource := resources.FromString "findings/search.json" ($index | jsonify) | fingerprint -}}
+{{- return $resource.RelPermalink -}}

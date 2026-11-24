@@ -1,0 +1,5 @@
+{{- $locations := newScratch -}}
+{{- range $i, $row := hugo.Data.generated.registry -}}
+  {{- $locations.Set $row.id (add 1 (div $i (int site.Params.registryPageSize))) -}}
+{{- end -}}
+{{- return $locations.Values -}}

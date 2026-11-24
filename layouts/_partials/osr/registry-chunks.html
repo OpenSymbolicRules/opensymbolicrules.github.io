@@ -1,0 +1,12 @@
+{{- $urls := slice -}}
+{{- $rows := hugo.Data.generated.registry -}}
+{{- $size := 100 -}}
+{{- range $page := seq (int (math.Ceil (div (float (len $rows)) $size))) -}}
+  {{- $html := slice -}}
+  {{- range first $size (after (mul (sub $page 1) $size) $rows) -}}
+    {{- $html = $html | append (string (partial "osr/registry-row.html" .)) -}}
+  {{- end -}}
+  {{- $file := resources.FromString (printf "findings/rows-%d.html" $page) (printf "<table><tbody>%s</tbody></table>" (delimit $html "\n")) | fingerprint -}}
+  {{- $urls = $urls | append $file.RelPermalink -}}
+{{- end -}}
+{{- return (dict "size" $size "urls" $urls) -}}

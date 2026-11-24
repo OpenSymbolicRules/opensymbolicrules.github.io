@@ -8,9 +8,7 @@ layout: wide
 
 # Findings registry
 
-This table lists the verification status of exported v1 rules and the reasons recorded for source rules considered but not migrated. Filter any column with the fields under the headers;
-click a header to sort, and shift-click further headers to sort by several
-columns. A filter accepts several words, all of which must match.
+This table lists the verification status of exported v1 rules and the reasons recorded for source rules considered but not migrated. Use **Rows per page** to change the page size. Filters and sorting apply across all pages. Click a header to sort, or shift-click to add a sort column. All words in a text filter must match.
 
 See [how a rule gets its status](/pipeline/#rule-status) and the [vocabulary](/vocabulary/). The registry summarizes the domain records as follows.
 

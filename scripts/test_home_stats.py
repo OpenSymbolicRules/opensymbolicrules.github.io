@@ -39,7 +39,12 @@ def main(html_path, stats_path):
     exported = stats["rules_distributed"]
     omissions = sum(s["not_migrated"] for s in stats["sets"].values())
     assert f"{exported} exported v1 entries across all domains and {omissions} audit records" in findings
-    assert f"{exported + omissions} of {exported + omissions} registry rows shown" in findings
+    total = exported + omissions
+    assert f"1–{min(500, total)} of {total}" in findings
+    # Each source entry is rendered exactly once across the static pages.
+    pages = [root / "findings/index.html"] + list((root / "findings/page").glob("*/index.html"))
+    counts = [p.read_text().split("<tbody>", 1)[1].split("</tbody>", 1)[0].count("<tr") for p in pages]
+    assert sum(counts) == total and max(counts) <= 500
     assert f"contains {integration['default_rules']} entries" in findings
 
 
