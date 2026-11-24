@@ -12,13 +12,16 @@ bookToC: false
 
 <p class="osr-tagline">Open, interoperable rules for symbolic mathematics.</p>
 
-OpenSymbolicRules publishes rewrite rules for computer algebra as plain JSON
-data, validated by JSON Schema and written with OpenMath symbols, so that any
-system can load them. Every rule states its conditions of validity, and each
-verified rule set records, per domain, a Lean 4 proof or a Lean
-counterexample. Classical rules that turn out to be false as stated are kept
-with their counterexample, and corrected variants are published next to them:
-rules become auditable objects instead of opaque system code.
+An OpenSymbolicRules rule describes a rewrite and the conditions it needs.
+Computer algebra systems can apply it, and Lean can check its mathematical statement.
+
+## From rule to result
+
+{{< workflow >}}
+
+[Follow the verification pipeline](/pipeline/) · [Explore proofs and counterexamples](/findings/)
+
+## Catalogue and verification
 
 {{< stats >}}
 

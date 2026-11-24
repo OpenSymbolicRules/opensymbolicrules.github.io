@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Show the conditional rewriting and Lean verification workflow on the homepage and pipeline page from one Mermaid diagram.
+
 - Generate default catalogue counts from the source load manifests and distinguish registry rows from exported v1 entries on the findings and domain pages.
 
 ### Changed
