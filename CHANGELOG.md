@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   multiple derived rules share a legacy identifier.
 
 ### Added
+- Show the Integration v0.1 corpus size alongside the separate v1 total,
+  with a source link and an explanation of duplicate and unloaded entries.
 - Add a consistently placed link from every domain to its filtered rules table.
 - Collect committed documentation for LinearAlgebra, TensorAlgebra and
   DifferentialGeometry, with source revision links and placeholders for empty

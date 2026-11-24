@@ -30,6 +30,7 @@ test:
 build: sitegen
 	PATH="$PWD/{{tools}}/dart-sass:$PATH" {{tools}}/hugo --minify --panicOnWarning --cleanDestinationDir -d {{out}}
 	julia --project=sitegen scripts/check-links.jl {{out}}
+	python3 -I scripts/test_home_stats.py {{out}}/index.html data/generated/stats.json
 
 # Serve the site locally with live reload.
 serve: sitegen

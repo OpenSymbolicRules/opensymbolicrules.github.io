@@ -5,8 +5,11 @@
   <div class="osr-stat"><span class="osr-num">{{ $s.rules_distributed }}</span>
     <span class="osr-label">rules distributed in <code>v1/</code> rule sets</span>
     <span class="osr-src">{{ $parts := slice }}{{ range $k, $v := $s.sets }}{{ $parts = $parts | append (printf "%s %v" $k $v.rules) }}{{ end }}{{ delimit $parts " · " }}</span></div>
+  <div class="osr-stat"><span class="osr-num">{{ $int.corpus_rules }}</span>
+    <span class="osr-label">Integration v0.1 rule entries in all files</span>
+    <span class="osr-src">Includes duplicates and files outside the default load order; separate from the v1 total. {{ with index $d.repos "Integration" }}<a href="{{ .url }}/tree/{{ .commit }}/rules">Integration@{{ .short }}</a>{{ end }}</span></div>
   <div class="osr-stat"><span class="osr-num">{{ $int.legacy_rules }}</span>
-    <span class="osr-label">RUBI 4.16.1 rules audited</span>
+    <span class="osr-label">legacy RUBI rules audited</span>
     <span class="osr-src">{{ sub $int.legacy_rules $int.not_migrated }} migrated, {{ $int.not_migrated }} reported as not migrated · {{ partial "osr/prov.html" $int.provenance }}</span></div>
   <div class="osr-stat"><span class="osr-num">{{ $s.theorems }}</span>
     <span class="osr-label">Lean 4 / Mathlib proofs and counterexamples</span>

@@ -15,6 +15,7 @@ No figure on this site is typed by hand. At build time,
 | Rules, conditions, findings, statuses | `v1/<set>.osr.json` of each domain repository |
 | Rules not migrated, metrics | `v1/<set>.report.json` |
 | Size of the source corpus (v0.1 rules) | the `rules/` tree of each domain repository |
+
 | Lean toolchain, Mathlib revision, source digest | the `build` record of each rule set |
 | Repository descriptions | `Specification/ecosystem.json`, then the site's `sitegen/repos.toml` for repositories it does not list |
 | Changelog entries | the first section of each `CHANGELOG.md` |
@@ -24,6 +25,11 @@ No figure on this site is typed by hand. At build time,
 | Progress over time (home page) | one point per directory `Verification/reports/<digest>/`, dated by the commit that added it (`git log --diff-filter=A`), with the `metrics` of its `*.report.json` files summed over the rule sets |
 | Commits | `git rev-parse`, `git log` and `git rev-list --count` of each checkout |
 | Visual identity (banner, logo, favicon, preview image) | `profile/assets/banner.png` of the organization repository `OpenSymbolicRules/.github`, derived by `scripts/brand-assets.py` |
+
+The homepage's Integration v0.1 count sums rule entries across the entire
+`rules/` tree, excluding `meta.json`. It includes duplicate entries and files
+outside the default load order. It is separate from the number of distributed
+v1 rules and is not a count of verified theorems.
 
 Every registry row and every figure links to `repository@commit` and the file
 it was read from, and the date of that commit. A rule's verification record
