@@ -24,3 +24,38 @@ description: How rules go from source data to verified, distributed artifacts.
    ({{< stat "conformance.total" >}} cases, {{< repo-head "Conformance" >}})
    and the client fixtures are copied from a published report and checked
    against it.
+
+## Rule status
+
+Read the diagram for **one rule, with its stated hypotheses, in one mathematical domain**. The exporter evaluates the available evidence for each report. A rule can enter the catalogue with a proof already checked, or acquire one in a later report.
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    accTitle: Verification status of one rule in one domain
+    accDescr: An audit records proved for a checked proof, counterexample for a checked refutation, unproved for an open statement, or unsupported when the domain is outside scope. New evidence or domain support allows another audit.
+    state "Audit" as Audit
+    state "unsupported" as Unsupported
+    state "unproved" as Unproved
+    state "proved" as Proved
+    state "counterexample" as Refuted
+    [*] --> Audit
+    Audit --> Unsupported : Outside scope
+    Audit --> Unproved : Statement open
+    Audit --> Proved : Proof checked
+    Audit --> Refuted : Refutation checked
+    Unproved --> Audit : New evidence
+    Unsupported --> Audit : Support added
+    classDef openCase fill:#fff0c9,stroke:#946515,color:#422b08
+    classDef success fill:#d0eadf,stroke:#347b65,color:#153e32
+    classDef failure fill:#f8e3e2,stroke:#984d4a,color:#522321
+    classDef unavailable fill:#edf0f3,stroke:#67737e,color:#293744
+    class Unproved openCase
+    class Proved success
+    class Refuted failure
+    class Unsupported unavailable
+```
+
+**When is a proved rule certified?** The record also carries a `certified` flag. It is true exactly when the status is `proved` and every symbol has a `reviewed` or `formally_related` interpretation in that domain. The same rule can have different records over ℝ and ℂ. An invalid theorem declaration or a forbidden axiom stops the export. [Verification requirements V1-V-001–006](https://github.com/OpenSymbolicRules/Specification/blob/main/docs/osr-v1.md#6-verification-records-and-certification)
+
+**How does this appear in the findings registry?** The domain columns display `counterexample` as **refuted**. A strengthened rule has its own ID and audit. Its proof applies to the added hypotheses, and the original retains its counterexample. **Not migrated** records a source rule considered before a v1 statement could be exported. [Power rule example](/findings/power-rule/) · [Findings registry](/findings/)

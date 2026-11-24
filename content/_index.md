@@ -19,7 +19,7 @@ Computer algebra systems can apply it, and Lean can check its mathematical state
 
 {{< workflow >}}
 
-[Follow the verification pipeline](/pipeline/) · [Explore proofs and counterexamples](/findings/)
+[Follow the verification pipeline](/pipeline/) · [How a rule gets its status](/pipeline/#rule-status) · [Explore proofs and counterexamples](/findings/)
 
 ## Catalogue and verification
 

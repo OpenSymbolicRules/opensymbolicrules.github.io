@@ -12,9 +12,9 @@ This table lists the verification status of exported v1 rules and the reasons re
 click a header to sort, and shift-click further headers to sort by several
 columns. A filter accepts several words, all of which must match.
 
-Statuses (see also the [Vocabulary](/vocabulary/)):
+See [how a rule gets its status](/pipeline/#rule-status) and the [vocabulary](/vocabulary/). The registry summarizes the domain records as follows.
 
-- **proved**: a Lean proof in every supported domain;
+- **proved**: a Lean proof in at least one domain, with no recorded counterexample;
 - **refuted**: a Lean counterexample in at least one domain;
 - **refuted, corrected**: refuted, and a strengthened variant is proved;
 - **strengthened**: a corrected variant: the converted conditions plus a

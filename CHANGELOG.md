@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   multiple derived rules share a legacy identifier.
 
 ### Added
+- Explain the per-domain verification statuses, certification and corrected variants with a Mermaid state diagram linked from the homepage and findings registry.
 - Show the Integration v0.1 corpus size alongside the separate v1 total,
   with a source link and an explanation of duplicate and unloaded entries.
 - Add a consistently placed link from every domain to its filtered rules table.

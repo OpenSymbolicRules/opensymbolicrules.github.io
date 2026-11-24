@@ -203,3 +203,11 @@ $osr-cream: #f5eee5;
   pre.mermaid { margin: 0; padding: 0; border: 0; background: transparent; }
   svg { height: auto; vertical-align: middle; }
 }
+
+// Keep transition labels readable on a phone while the surrounding page reflows.
+#rule-status ~ pre.mermaid {
+  overflow-x: auto;
+  background: var(--body-background);
+  border: 1px solid var(--gray-200);
+  svg { min-width: 26rem; }
+}
