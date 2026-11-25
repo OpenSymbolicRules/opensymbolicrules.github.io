@@ -2,6 +2,17 @@
     include("fixtures.jl")
     using SiteGen: om_text
     @test om_text(omv("x")) == "x"
+    product(a, b) = oma(oms("arith1", "times"), a, b)
+    a, b, c = omv.(["A", "B", "C"])
+    # Scalar products are associative: a left-nested chain reads without parentheses.
+    @test om_text(product(product(a, b), c)) == "A B C"
+    # The typed pilot examples keep the grouping, so (A B) C → A (B C) is readable.
+    import SiteGen
+    using Base.ScopedValues: with
+    with(SiteGen.GROUP_PRODUCTS => true) do
+        @test om_text(product(product(a, b), c)) == "(A B) C"
+        @test om_text(product(a, product(b, c))) == "A (B C)"
+    end
     @test om_text(omi(-1)) == "-1"
     @test om_text(oma(oms("arith1", "plus"), omv("a"), oma(oms("arith1", "times"), omv("b"), omv("x")))) == "a + b x"
     @test om_text(oma(oms("arith1", "power"), oma(oms("arith1", "plus"), omv("a"), omv("x")), omv("m"))) == "(a + x)^m"

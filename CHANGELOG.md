@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   section, each with status and collected repository documentation.
 
 ### Fixed
+- Resolve repository links whose Markdown labels wrap across lines when collecting domain documentation. This restores the link to the LinearAlgebra proof status report in the matrix examples.
+- Include the typed LinearAlgebra pilot examples in the filtered findings table with their conditions and source revisions. Pilot rows have a separate count from v1 exports.
+- Keep the grouping of nested matrix products in the pilot rows, so `(A B) C → A (B C)` stays readable, without adding parentheses to the scalar product chains of the v1 rule sets.
 - Preserve a registry filter from a link when its domain has no published
   rules, rather than displaying unrelated rules.
 - Show the evaluation argument of a residual integral when a rule applies a

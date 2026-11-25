@@ -2,6 +2,7 @@
 {{- $rows := $d.registry -}}
 <p>The registry contains {{ $d.stats.rules_distributed }} exported v1 entries across all domains and
   {{ len (where $rows "status" "not migrated") }} audit records for rules considered but not migrated.
+  It also lists {{ $d.stats.pilot_examples }} LinearAlgebra pilot examples.
   <a href="/domains/integration/">Integration’s default v0.1 catalogue</a> contains
   {{ $d.stats.sets.integration.default_rules }} entries.</p>
 {{- $size := site.Params.registryPageSize | int -}}

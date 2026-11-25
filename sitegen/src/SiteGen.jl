@@ -11,6 +11,7 @@ module SiteGen
 using Dates
 using JSON
 using TOML
+using Base.ScopedValues: ScopedValue, with
 
 export build
 
@@ -76,6 +77,11 @@ end
 
 paren(o, need) = prec(o) < need ? "(" * om_text(o) * ")" : om_text(o)
 
+"""When true, a product nested in a product keeps its parentheses, as in
+`(A B) C → A (B C)` for matrices.  Off by default: scalar products are
+associative and the v1 rule sets write longer products as left-nested chains."""
+const GROUP_PRODUCTS = ScopedValue(false)
+
 """
     om_text(o) -> String
 
@@ -113,6 +119,11 @@ function om_text(o)::String
             # need parentheses at equal precedence.
             need = (i > 1 && key in ("arith1#minus", "arith1#divide")) ? p + 1 : p
             p == 0 && (need = 1)
+            # Preserve grouping in rewrites such as (A B) C → A (B C).
+            if GROUP_PRODUCTS[] && key == "arith1#times" && kind(a) == "OMA" &&
+                    issym(a["applicant"], key)
+                need = p + 1
+            end
             push!(parts, paren(a, need))
         end
         return join(parts, op)
@@ -282,6 +293,62 @@ function count_by(rows, key)
     return c
 end
 
+"""Display the typed pilot context alongside mathematical conditions and rewrite guards."""
+function pilot_conditions(rule)
+    ctx = rule["context"]
+    carriers = [get(CONSTANTS, key, key) for key in ctx["scalar_domains"]]
+    lines = ["Scalar field: " * join(carriers, " or ")]
+    for (name, dim) in sort!(collect(get(ctx, "dimensions", Dict())); by = first)
+        push!(lines, "$name ∈ ℕ, $name ≥ $(dim["min"])")
+    end
+    for (name, var) in sort!(collect(ctx["variables"]); by = first)
+        type = var["kind"]
+        shape = if type == "matrix"
+            " ($(var["rows"]) × $(var["columns"]))"
+        elseif type == "vector"
+            " ($(var["dimension"])D)"
+        else
+            ""
+        end
+        push!(lines, "$name: $type$shape")
+    end
+    if haskey(ctx, "space")
+        for (key, value) in sort!(collect(ctx["space"]); by = first)
+            push!(lines, "$key: $value")
+        end
+    end
+    append!(lines, om_text.(rule["conditions"]))
+    guard = get(rule, "application_guard", nothing)
+    isnothing(guard) || push!(lines, "Application guard: " * JSON.json(guard))
+    return lines
+end
+
+"""Read experimental JSON examples as registry rows, independently of v1 exports."""
+function linear_algebra_examples(sources, repos)
+    rows = Dict{String,Any}[]
+    repo = "LinearAlgebra"
+    for file in ("matrix-identities.json", "vector-identities.json")
+        path = "examples/$file"
+        source = joinpath(sources, repo, path)
+        isfile(source) || continue
+        doc = JSON.parsefile(source)
+        prov = provenance(repo, repos[repo], path, "")
+        for rule in doc["rules"]
+            rule["orientation"] == "forward" || error("Unsupported orientation in $path: $(rule["id"])")
+            # Matrix products are not commutative: keep their grouping visible.
+            text = with(GROUP_PRODUCTS => true) do
+                (om_text(rule["pattern"]), om_text(rule["replacement"]), pilot_conditions(rule))
+            end
+            push!(rows, Dict("id" => rule["id"], "domain" => repo, "set" => "linearalgebra",
+                "status" => "pilot example", "real" => "—", "complex" => "—",
+                "title" => doc["profile"], "pattern" => text[1],
+                "replacement" => text[2], "conditions" => text[3],
+                "counterexample" => "", "provenance" => prov))
+        end
+    end
+    return rows
+end
+
 """
     build(sources, out; sets = DEFAULT_SETS, example = "integration.linear_power_nondegenerate")
 
@@ -392,6 +459,9 @@ function build(sources, out; sets = DEFAULT_SETS,
     end
     stats["rules_distributed"] = sum((s["rules"] for s in values(stats["sets"])); init = 0)
     stats["theorems"] = sum((length(r["theorems"]) for r in rows); init = 0)
+    pilot = linear_algebra_examples(sources, repos)
+    stats["pilot_examples"] = length(pilot)
+    append!(rows, pilot)
     stats["repositories"] = length(repos)
     stats["generated"] = string(Dates.today())
     extra_stats!(stats, sources, repos)

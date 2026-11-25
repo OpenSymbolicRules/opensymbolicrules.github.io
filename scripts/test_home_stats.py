@@ -11,6 +11,12 @@ class Text(HTMLParser):
     def __init__(self):
         super().__init__()
         self.parts = []
+        self.registry_index = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "table" and "data-osr-registry" in attrs:
+            self.registry_index = attrs["data-index"]
 
     def handle_data(self, data):
         self.parts.append(data)
@@ -39,7 +45,15 @@ def main(html_path, stats_path):
     exported = stats["rules_distributed"]
     omissions = sum(s["not_migrated"] for s in stats["sets"].values())
     assert f"{exported} exported v1 entries across all domains and {omissions} audit records" in findings
-    total = exported + omissions
+    pilots = stats["pilot_examples"]
+    assert f"{pilots} LinearAlgebra pilot examples" in findings
+    registry_page = Text()
+    registry_page.feed((root / "findings/index.html").read_text())
+    index_path = root / registry_page.registry_index.lstrip("/")
+    pilot_cells = [r["cells"] for r in json.loads(index_path.read_text()) if r["cells"][2] == "LinearAlgebra"]
+    assert len(pilot_cells) == pilots
+    assert all(cells[3:6] == ["pilot example", "—", "—"] for cells in pilot_cells)
+    total = exported + omissions + pilots
     assert f"1–{min(500, total)} of {total}" in findings
     # Each source entry is rendered exactly once across the static pages.
     pages = [root / "findings/index.html"] + list((root / "findings/page").glob("*/index.html"))

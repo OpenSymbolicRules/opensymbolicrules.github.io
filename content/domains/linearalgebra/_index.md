@@ -10,13 +10,13 @@ Abstract matrices and vectors, their dimensions and conditional rewrite rules.
 
 ## Rules
 
-[View LinearAlgebra rules in the registry](/findings/?c2=LinearAlgebra).
-There are no published v1 rules for this domain yet.
+[Browse the {{< stat "pilot_examples" >}} typed matrix and vector examples in the registry](/findings/?c2=LinearAlgebra).
+Each row links to the experimental JSON at the revision used for this site.
 
 ## Status
 
-Research and numerical pilot. Mathematical identities have been checked in
-Lean, but there is no exported or certified v1 rule set yet.
+The pilot checks the mathematical identities in Lean. The [status report](https://github.com/OpenSymbolicRules/LinearAlgebra/blob/main/reports/status.md)
+tracks which proofs are connected to the JSON expressions. OSR v1 export and certification are pending.
 
 ## Documentation
 

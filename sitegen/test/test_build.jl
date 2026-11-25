@@ -154,3 +154,38 @@ end
         @test_throws ArgumentError SiteGen.source_counts(dir)
     end
 end
+
+@testitem "LinearAlgebra pilot examples have searchable rows and separate counts" begin
+    include("fixtures.jl")
+    using SiteGen, JSON
+    mktempdir() do root
+        src, out = joinpath(root, "sources"), joinpath(root, "out")
+        repo = fixture_repo(src, "LinearAlgebra", "unused", [])
+        mkdir(joinpath(repo, "examples"))
+        rule = Dict("id" => "linear_algebra.swap", "orientation" => "forward",
+            "pattern" => omv("u"), "replacement" => omv("v"),
+            "conditions" => [oma(oms("relation1", "neq"), omv("u"), omv("v"))],
+            "context" => Dict("scalar_domains" => ["setname1#R"],
+                "variables" => Dict("u" => Dict("kind" => "vector", "dimension" => 3)),
+                "space" => Dict("orientation" => "right_handed")),
+            "application_guard" => Dict("kind" => "strict_variable_name_order", "less" => "v", "greater" => "u"))
+        path = "examples/vector-identities.json"
+        write(joinpath(repo, path), JSON.json(Dict("profile" => "example/0.1", "rules" => [rule])))
+        git!(repo, "add", "examples")
+        git!(repo, "commit", "-qm", "pilot")
+        rows = SiteGen.build(src, out)
+        @test length(rows) == 1
+        row = only(rows)
+        @test (row["id"], row["domain"], row["status"]) == ("linear_algebra.swap", "LinearAlgebra", "pilot example")
+        @test row["provenance"]["path"] == path
+        @test row["provenance"]["commit"] == readchomp(`git -C $repo rev-parse HEAD`)
+        @test row["real"] == row["complex"] == "—"
+        @test row["pattern"] == "u" && row["replacement"] == "v"
+        for token in ("ℝ", "vector", "3", "right_handed", "u ≠ v", "strict_variable_name_order")
+            @test occursin(token, join(row["conditions"], " "))
+        end
+        stats = JSON.parsefile(joinpath(out, "stats.json"))
+        @test stats["rules_distributed"] == stats["theorems"] == 0
+        @test stats["pilot_examples"] == 1
+    end
+end

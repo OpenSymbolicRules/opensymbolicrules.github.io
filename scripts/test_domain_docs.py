@@ -39,6 +39,11 @@ class DomainDocsTests(unittest.TestCase):
                 self.assertIn('not yet available', page)
                 self.assertIn(f'github.com/OpenSymbolicRules/{name}', page)
 
+    def test_wrapped_link_label_keeps_its_source_revision(self):
+        link = "[status\nreport](../reports/status.md)"
+        expected = "[status\nreport](https://github.com/OpenSymbolicRules/LinearAlgebra/blob/abc/reports/status.md)"
+        self.assertEqual(module.rewrite_links(link, "LinearAlgebra", "abc", "docs/matrix-examples.md"), expected)
+
     def test_collects_markdown_at_commit_and_rewrites_relative_links(self):
         with tempfile.TemporaryDirectory() as root:
             source, dest = Path(root) / 'sources', Path(root) / 'out'

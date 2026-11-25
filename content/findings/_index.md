@@ -1,7 +1,7 @@
 ---
 title: Findings registry
 weight: 10
-description: Every rule of the OSR v1 rule sets with its status, conditions of validity, counterexample and provenance.
+description: Exported OSR v1 rules, migration findings and typed pilot examples with their conditions and sources.
 bookToC: false
 layout: wide
 ---
@@ -24,7 +24,11 @@ See [how a rule gets its status](/pipeline/#rule-status) and the [vocabulary](/v
 - **unproved**, **unsupported**: no proof or counterexample yet, or a
   condition with no meaning in the domain;
 - **not migrated**: considered, but not expressible in OSR v1 yet (the reason
-  is given).
+  is given);
+- **pilot example**: an experimental typed rewrite from the LinearAlgebra repository.
+  The field and shape assumptions appear under **Conditions of validity**. The dashes
+  in the domain columns mean that no v1 verification record has been published.
+  [Pilot proof status](https://github.com/OpenSymbolicRules/LinearAlgebra/blob/main/reports/status.md).
 
 The domain columns read **certified** (proved, with a reviewed mapping of the
 symbols), **proved**, **refuted**, **unproved** or **unsupported**.

@@ -14,7 +14,7 @@ from urllib.parse import quote, urlsplit
 EMERGING = ('LinearAlgebra', 'TensorAlgebra', 'DifferentialGeometry')
 DOMAINS = ('Integration', 'Calculus', 'Algebra', 'Trigonometry', 'Logic', *EMERGING)
 MARKER = '.osr-domain-docs-generated'
-LINK = re.compile(r'(!?\[[^\]\n]*\]\()([^\s()]+)(\))')
+LINK = re.compile(r'(!?\[[^\[\]]*\]\()([^\s()]+)(\))')
 
 
 def git(repo, *args):
