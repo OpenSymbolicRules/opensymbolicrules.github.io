@@ -47,6 +47,43 @@ def rewrite_links(text, repo, commit, path):
     return LINK.sub(replace, text).replace('{{<', '&#123;{<').replace('{{%', '&#123;{%')
 
 
+FENCE = re.compile(r'^\s*(```|~~~)')
+
+
+def clean_heading(text):
+    """Plain text of a Markdown heading: links, code, emphasis and tags removed."""
+    text = re.sub(r'!?\[([^\]]*)\]\([^)]*\)', r'\1', text)
+    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r'\s+#+\s*$', '', text)
+    text = text.replace('`', '')
+    text = re.sub(r'(\*\*|__|\*|_)(\S(?:.*?\S)?)\1', r'\2', text)
+    return ' '.join(text.split())
+
+
+def page_title(path, text):
+    """Menu title of a collected page: `Overview` for the README, `Documentation
+    home` for `docs/index.md`, otherwise its first level-1 heading, or the file
+    name in words when it has none."""
+    if PurePosixPath(path).name.lower() == 'readme.md':
+        return 'Overview'
+    if path.lower() == 'docs/index.md':
+        return 'Documentation home'
+    lines, fenced = text.splitlines(), False
+    for i, line in enumerate(lines):
+        if FENCE.match(line):
+            fenced = not fenced
+            continue
+        if fenced:
+            continue
+        m = re.match(r'^ {0,3}#(?!#)\s+(.+)$', line)
+        if m and clean_heading(m.group(1)):
+            return clean_heading(m.group(1))
+        if i + 1 < len(lines) and line.strip() and re.match(r'^ {0,3}=+\s*$', lines[i + 1]):
+            return clean_heading(line)
+    words = re.sub(r'[-_]+', ' ', PurePosixPath(path).stem).strip()
+    return words[:1].upper() + words[1:] if words else path
+
+
 def collect(source, destination):
     source, destination = Path(source), Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
@@ -85,21 +122,26 @@ def collect(source, destination):
         index += f'Source: [{repo} at `{commit[:12]}`](https://github.com/OpenSymbolicRules/{repo}/tree/{commit}).\n\n'
         if not files:
             index += 'Documentation is not yet available in this revision.\n'
-        for path in sorted(files):
+        texts = {path: subprocess.check_output(['git', '-C', str(checkout), 'show', f'{commit}:{path}']).decode('utf-8')
+                 for path in files}
+        titles = {path: page_title(path, texts[path]) for path in files}
+        # The README first, then the pages by title; the menu follows the weights.
+        ordered = sorted(files, key=lambda p: (titles[p] != 'Overview', titles[p].lower(), p))
+        for weight, path in enumerate(ordered, start=1):
             # A stable lowercase route avoids Hugo case-folding and index-name
             # collisions, while the original path remains visible in the page.
             stem = 'doc-' + hashlib.sha256(path.encode('utf-8')).hexdigest()
             relative = PurePosixPath(stem + '.md')
             output = folder / 'pages' / relative
             output.parent.mkdir(parents=True, exist_ok=True)
-            text = subprocess.check_output(['git', '-C', str(checkout), 'show', f'{commit}:{path}']).decode('utf-8')
-            title = path
-            front = f'---\ntitle: {json.dumps(title)}\n---\n\n'
-            attribution = (f'Source: [{repo}/{path} at `{commit[:12]}`]'
+            text = texts[path]
+            title = titles[path]
+            front = f'---\ntitle: {json.dumps(title, ensure_ascii=False)}\nweight: {weight}\n---\n\n'
+            attribution = (f'Source: [{repo} at `{commit[:12]}`]'
                            f'(https://github.com/OpenSymbolicRules/{repo}/blob/{commit}/{quote(path, safe="/")}).\n\n')
             output.write_text(front + attribution + rewrite_links(text, repo, commit, path), encoding='utf-8')
             route = str(PurePosixPath('pages') / relative.with_suffix('')) + '/'
-            index += f'- [{path}]({route})\n'
+            index += f'- [{title}]({route})\n'
         (folder / '_index.md').write_text(index, encoding='utf-8')
 
 
