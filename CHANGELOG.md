@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Generate default catalogue counts from the source load manifests and distinguish registry rows from exported v1 entries on the findings and domain pages.
 
+### Added
+- Track the corrected variants (strengthened variants of refuted rules,
+  proved or not yet proved) in each Verification report, and the v0.1 source
+  rules of the domain repositories commit by commit, in the progress charts of
+  the home and History pages.
+- Zoom the progress charts into any period by dragging across them (or with
+  the + and − keys); a double-click or "Show all" returns to the whole history.
+
 ### Changed
 - Unify established and emerging mathematical domains under one Domains
   section, each with status and collected repository documentation.

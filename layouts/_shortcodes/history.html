@@ -9,9 +9,12 @@
 {{- $last := index $h (sub (len $h) 1) -}}
 <figure class="osr-history" data-osr-history>
   <figcaption>Rules exported in <code>v1/</code> rule sets, and their status per domain, for each of the
-    {{ len $h }} reports published by Verification ({{ (index $h 0).date }} to {{ $last.date }}).</figcaption>
+    {{ len $h }} reports published by Verification ({{ (index $h 0).date }} to {{ $last.date }}), and the
+    corrected variants (strengthened variants of refuted rules) the reports distribute.</figcaption>
+  <p class="osr-history-hint">Drag across a chart to zoom into a period (keyboard: + and −); double-click
+    it to see every report again. <button type="button" class="osr-history-reset" hidden>Show all reports</button></p>
   <div class="osr-history-legend" aria-hidden="true">
-    <span><i class="osr-key osr-key-total"></i>rules exported</span>
+    <span><i class="osr-key osr-key-total"></i>rules exported (corrected variants in their chart)</span>
     <span><i class="osr-key osr-key-proved"></i>proved</span>
     <span><i class="osr-key osr-key-refuted"></i>refuted (counterexample)</span>
     <span><i class="osr-key osr-key-unproved"></i>unproved</span>
@@ -21,6 +24,10 @@
       aria-label="Over ℝ: {{ $last.rules }} rules exported, {{ $last.real.proved }} proved, {{ $last.real.counterexample }} refuted, {{ $last.real.unproved }} unproved at the latest report."><h4>Over ℝ</h4></div>
     <div class="osr-history-panel" data-domain="complex" role="img"
       aria-label="Over ℂ: {{ $last.rules }} rules exported, {{ $last.complex.proved }} proved, {{ $last.complex.counterexample }} refuted, {{ $last.complex.unproved }} unproved at the latest report."><h4>Over ℂ</h4></div>
+    {{- with $last.corrections }}
+    <div class="osr-history-panel" data-kind="corrections" role="img"
+      aria-label="Corrected variants: {{ .total }} at the latest report, {{ .proved }} of them proved, {{ sub .total .proved }} not yet proved."><h4>Corrected variants</h4></div>
+    {{- end }}
   </div>
   <div class="osr-history-tip" hidden></div>
   <script type="application/json" data-osr-history-data>{{ $h | jsonify | safeJS }}</script>
@@ -30,12 +37,14 @@
     <table class="osr-table">
       <thead><tr><th scope="col">Date</th><th scope="col">Report</th><th scope="col">Rules</th>
         <th scope="col">ℝ proved</th><th scope="col">ℝ refuted</th><th scope="col">ℝ unproved</th>
-        <th scope="col">ℂ proved</th><th scope="col">ℂ refuted</th><th scope="col">ℂ unproved</th></tr></thead>
+        <th scope="col">ℂ proved</th><th scope="col">ℂ refuted</th><th scope="col">ℂ unproved</th>
+        <th scope="col">Corrected</th><th scope="col">Corrected, proved</th></tr></thead>
       <tbody>
       {{- range (cond $full (collections.Reverse $h) $h) }}
         <tr><td>{{ .date }}</td><td><a href="{{ .url }}"><code>{{ substr .report 0 8 }}</code></a></td><td>{{ .rules }}</td>
           <td>{{ .real.proved }}</td><td>{{ .real.counterexample }}</td><td>{{ .real.unproved }}</td>
-          <td>{{ .complex.proved }}</td><td>{{ .complex.counterexample }}</td><td>{{ .complex.unproved }}</td></tr>
+          <td>{{ .complex.proved }}</td><td>{{ .complex.counterexample }}</td><td>{{ .complex.unproved }}</td>
+          <td>{{ with .corrections }}{{ .total }}{{ else }}—{{ end }}</td><td>{{ with .corrections }}{{ .proved }}{{ else }}—{{ end }}</td></tr>
       {{- end }}
       </tbody>
     </table>
@@ -63,8 +72,53 @@
   {{- end }}
   <p class="osr-src">Each point is a directory <code>reports/&lt;digest&gt;/</code> of
     <a href="https://github.com/OpenSymbolicRules/Verification">Verification</a>, dated by the commit that added it;
-    the counts are the <code>metrics</code> of its <code>*.report.json</code> files, summed over the rule sets.</p>
+    the counts are the <code>metrics</code> of its <code>*.report.json</code> files, summed over the rule sets,
+    and the corrected variants are the rules of its <code>*.osr.json</code> files with a <code>strengthened:</code>
+    finding (proved: with a proof in some domain).</p>
 </figure>
+{{- with $d.source_history }}
+{{- $s := . -}}
+{{- $sl := index $s (sub (len $s) 1) -}}
+<figure class="osr-history" data-osr-history>
+  <figcaption>v0.1 source rules in the <code>rules/</code> directories of the domain repositories, for each of the
+    {{ len $s }} commits that changed their number ({{ (index $s 0).date }} to {{ $sl.date }}): every entry, and the
+    entries the default load manifests select.</figcaption>
+  <p class="osr-history-hint">Drag across the chart to zoom into a period (keyboard: + and −); double-click
+    it to see every commit again. <button type="button" class="osr-history-reset" hidden>Show all commits</button></p>
+  <div class="osr-history-legend" aria-hidden="true">
+    <span><i class="osr-key osr-key-total"></i>v0.1 entries</span>
+    <span><i class="osr-key osr-key-loaded"></i>in the default load manifests</span>
+  </div>
+  <div class="osr-history-charts">
+    <div class="osr-history-panel" data-kind="v01" role="img"
+      aria-label="v0.1 source rules: {{ $sl.total }} entries, {{ $sl.loaded }} in the default load manifests at the latest commit."><h4>v0.1 source rules</h4></div>
+  </div>
+  <div class="osr-history-tip" hidden></div>
+  <script type="application/json" data-osr-history-data>{{ $s | jsonify | safeJS }}</script>
+  <details class="osr-history-table"{{ if $full }} open{{ end }}>
+    <summary>Table of the {{ len $s }} commits</summary>
+    <div class="osr-table-wrap">
+    <table class="osr-table">
+      {{- $repos := slice -}}
+      {{- range $k, $v := $sl.sets }}{{ $repos = $repos | append $k }}{{ end }}
+      <thead><tr><th scope="col">Date</th><th scope="col">Commit</th><th scope="col">Entries</th><th scope="col">Default manifests</th>
+        {{- range $repos }}<th scope="col">{{ . }}</th>{{ end }}</tr></thead>
+      <tbody>
+      {{- range (cond $full (collections.Reverse $s) $s) }}
+        {{- $r := . }}
+        <tr><td>{{ .date }}</td><td><a href="{{ .url }}">{{ .repo }} <code>{{ substr .commit 0 7 }}</code></a></td>
+          <td>{{ .total }}</td><td>{{ .loaded }}</td>
+          {{- range $repos }}<td>{{ index $r.sets . | default "—" }}</td>{{ end }}</tr>
+      {{- end }}
+      </tbody>
+    </table>
+    </div>
+  </details>
+  <p class="osr-src">Each point is a commit of a domain repository that changed the number of v0.1 entries under
+    <code>rules/</code> (every <code>*.json</code> file but <code>meta.json</code>, whose <code>load_order</code> is the
+    default load manifest); the counts of the other repositories are those of their latest earlier commit.</p>
+</figure>
+{{- end }}
 {{- with resources.Get "js/history.js" | minify | fingerprint }}
 <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
 {{- end }}

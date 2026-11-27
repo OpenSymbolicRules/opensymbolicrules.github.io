@@ -472,6 +472,7 @@ function build(sources, out; sets = DEFAULT_SETS,
     ver = joinpath(sources, "Verification")
     write_json(joinpath(out, "history.json"),
         isdir(joinpath(ver, ".git")) ? verification_history(ver) : Any[])
+    write_json(joinpath(out, "source_history.json"), source_history(sources, sets))
     write_json(joinpath(out, "example_rule.json"),
         example_rule === nothing ? Dict() :
         Dict("rule" => example_rule, "provenance" => first(r["provenance"] for r in rows if r["id"] == example)))
@@ -538,13 +539,90 @@ function verification_history(dir)
             end
         end
         isempty(sets) && continue
+        # Corrections: strengthened variants of refuted rules, and those proved.
+        corr = Dict("total" => 0, "proved" => 0)
+        for f in readdir(rd)
+            endswith(f, ".osr.json") || continue
+            for r in get(JSON.parsefile(joinpath(rd, f)), "rules", [])
+                has_finding(r, "strengthened:") || continue
+                corr["total"] += 1
+                "proved" in statuses(r) && (corr["proved"] += 1)
+            end
+        end
         push!(points, Dict{String,Any}("report" => d, "commit" => commit,
-            "time" => stamp, "date" => stamp[1:10], "sets" => sets,
+            "time" => stamp, "date" => stamp[1:10], "sets" => sets, "corrections" => corr,
             "rules" => sum(values(sets)), "real" => dom["real"], "complex" => dom["complex"],
             "url" => "$ORG_URL/Verification/tree/$commit/reports/$d"))
     end
     sort!(points; by = p -> (p["time"], p["rules"]))
     return points
+end
+
+"""
+    source_history(sources, sets) -> Vector
+
+The v0.1 rule inventory over time: one point per commit that changed `rules/`
+in a domain repository of `sets`, with the entries of every repository as of
+that commit (`total`) and the subset its default load manifest selects
+(`loaded`, every entry when there is no manifest).
+"""
+function source_history(sources, sets)
+    events = Any[]
+    for repo in unique(last.(sets))
+        dir = joinpath(sources, repo)
+        isdir(joinpath(dir, ".git")) || continue
+        log = gitout(dir, "log", "--reverse", "--format=%H %cI", "--", "rules")
+        cache = Dict{String,Any}()
+        for line in split(log, '\n'; keepempty = false)
+            commit, stamp = split(line)
+            push!(events, (stamp, repo, String(commit), rules_at(dir, commit, cache)))
+        end
+    end
+    sort!(events; by = e -> e[1])
+    current = Dict{String,Any}()
+    points = Dict{String,Any}[]
+    for (stamp, repo, commit, counts) in events
+        current[repo] = counts
+        total = sum(v.all for v in values(current))
+        loaded = sum(something(v.loaded, v.all) for v in values(current))
+        # Only the commits that change the inventory are points.
+        !isempty(points) && points[end]["total"] == total && points[end]["loaded"] == loaded && continue
+        push!(points, Dict{String,Any}("time" => stamp, "date" => stamp[1:10],
+            "repo" => repo, "commit" => commit,
+            "sets" => Dict(k => v.all for (k, v) in current),
+            "total" => total, "loaded" => loaded,
+            "url" => "$ORG_URL/$repo/tree/$commit/rules"))
+    end
+    return points
+end
+
+"""
+The v0.1 entry counts of `rules/` at `commit`, as `source_counts` gives them.
+`cache` maps a blob id to its parsed content, so that a file unchanged between
+commits is read once.
+"""
+function rules_at(dir, commit, cache = Dict{String,Any}())
+    tree = split(gitout(dir, "ls-tree", "-r", commit, "--", "rules"), '\n'; keepempty = false)
+    counts = Dict{String,Int}()
+    order = nothing
+    for line in tree
+        meta, f = split(line, '\t'; limit = 2)
+        endswith(f, ".json") || continue
+        blob = String(split(meta)[3])
+        doc = get!(cache, blob) do
+            d = JSON.parse(read(`git -C $dir cat-file blob $blob`, String))
+            f == "rules/meta.json" ? d : Dict("rules" => length(get(d, "rules", [])),
+                "load_order" => get(d, "load_order", nothing))
+        end
+        if f == "rules/meta.json"
+            order = get(doc, "load_order", nothing)
+        else
+            counts[relpath(f, "rules")] = doc["rules"] isa Integer ? doc["rules"] : length(doc["rules"])
+        end
+    end
+    all_count = sum(values(counts); init = 0)
+    loaded = order isa AbstractVector ? sum(get(counts, p, 0) for p in order; init = 0) : nothing
+    return (all = all_count, loaded = loaded)
 end
 
 "Counts read from the Specification, Lean, Conformance and Verification checkouts."

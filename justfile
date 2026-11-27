@@ -25,6 +25,7 @@ test:
 	python3 -I scripts/test_brand_assets.py
 	python3 -I scripts/test_domain_docs.py
 	node assets/js/registry.test.js
+	node assets/js/history.test.js
 
 # Build the site into public/ (no warning allowed), then check its internal links.
 build: sitegen
